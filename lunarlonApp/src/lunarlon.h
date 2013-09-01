@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ring.h"
 #include "ringMaster.h"
+#include "user.h"
 
 class lunarlon : public ofBaseApp{
 
@@ -25,11 +26,15 @@ class lunarlon : public ofBaseApp{
     // Styling
     ofImage bg;
     
-    //ring master
+    //Ring Master
     RingMaster ringmaster;
     vector<ofVec2f>blobPoints;
 
     // Touch
     bool bTouch;
+    
+    //User graphics
+    vector<User>users;
+    
 
 };

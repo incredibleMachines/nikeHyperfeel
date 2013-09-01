@@ -49,7 +49,7 @@ void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
     //update blobs positions in rings
     for (int i=0; i<rings.size(); i++) {
         rings[i].updateForces(_blobs);
-        rings[i].p2pForceStrength = touch();
+//        rings[i].p2pForceStrength = touch();
     }
     
 

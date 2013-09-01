@@ -76,11 +76,10 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
         }
     }
     
-    // Draw Mesh
+    // Create Mesh
     for (int i=0; i<particles.size(); i++) {
-        
         ofColor tempColor;
-        tempColor.setHsb(78 - 0.3*i, 255, 255-2*i,20);
+        tempColor.setHsb(78 - 0.4*i, 255-i/2, 255-i,20);
         ofSetLineWidth(3);
         mesh.addColor(tempColor);
         mesh.addVertex(particles[i].pos);
@@ -89,6 +88,10 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
     // Springs update
     for (int i=0; i<springs.size(); i++) {
         springs[i].update();
+        ofColor tempColor;
+        tempColor.setHsb(78 - 0.3*i, 255, 255,200);
+
+        springs[i].color = tempColor;
     }
     
     // Particle update. This should go at the end--Important!!
@@ -102,12 +105,12 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
 //------------------------------------------------------------
 void Ring::setColor(ofColor _color){
     baseColor = _color;
-    
 }
 
 //------------------------------------------------------------
 void Ring::draw(){
     mesh.draw();
+    
     for (int i=0; i<springs.size(); i++) {
         springs[i].draw();
     }

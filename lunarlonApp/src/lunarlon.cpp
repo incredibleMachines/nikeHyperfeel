@@ -24,6 +24,15 @@ void lunarlon::setup(){
     
     //Touch
     bTouch = false;
+    
+    //Users
+    for(int i=0; i<blobPoints.size();i++){
+        User tempUser;
+        users.push_back(tempUser);
+        users[i].setup();
+    }
+    
+    
 
 }
 
@@ -31,7 +40,13 @@ void lunarlon::setup(){
 void lunarlon::update(){
     
     blobPoints[0] = ofVec2f(mouseX, mouseY);
-    ringmaster.update(blobPoints, bTouch); //using Dummy points until CV blobs are implemented
+    ringmaster.update(blobPoints, bTouch); //using Dummy points(blobPoints) until CV blobs are implemented
+    
+    
+    //Update user graphics
+    for(int i=0; i<blobPoints.size();i++){
+        users[i].updatePosition(blobPoints[i]);
+    }
 
 }
 
@@ -39,6 +54,12 @@ void lunarlon::update(){
 void lunarlon::draw(){
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
     bg.draw(0,0);
+    
+    //Draw user graphics
+    for(int i=0; i<blobPoints.size();i++){
+        users[i].draw();
+    }
+    
     ringmaster.draw();
 
 }
