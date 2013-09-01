@@ -266,7 +266,6 @@ void particle::draw(){
 	
 }
 
-
 //------------------------------------------------------------
 void particle::bounceOffWalls(){
 	
@@ -327,6 +326,6 @@ void particle::changeColor(ofVec2f _pos, float _radius){
 		float pct = 1 - (length / _radius);  // stronger on the inside
         //		diff.normalize();
         color.setHsb(78, 100 + 155*pct, 240 + 10*pct, 255);
-        particleRadius = 1.5 + 2 * pct;
+        particleRadius = 1 + 2.5 * pct;
     }
 }

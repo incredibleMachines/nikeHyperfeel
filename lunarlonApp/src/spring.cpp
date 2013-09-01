@@ -44,13 +44,10 @@ void Spring::draw(){
     }
     
     ofPushStyle;
-    ofSetLineWidth(lineThickness);
+    ofSetLineWidth(2);
     ofSetColor(color);
     ofLine(particleA->pos,particleB->pos);
     ofPopStyle;
-
-
-
 }
 
 //------------------------------------------

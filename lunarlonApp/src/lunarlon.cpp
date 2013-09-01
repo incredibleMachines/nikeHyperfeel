@@ -12,8 +12,6 @@ void lunarlon::setup(){
     ofBackground(0);
     bg.loadImage("bg_1.jpg");
     
-
-    
     //Dummy blob points, remove when CV is implemeted !!
     for(int i=0; i< 6;i++){
         ofVec2f temp;
@@ -23,6 +21,9 @@ void lunarlon::setup(){
     
     //RingMaster
     ringmaster.setup();
+    
+    //Touch
+    bTouch = false;
 
 }
 
@@ -30,7 +31,7 @@ void lunarlon::setup(){
 void lunarlon::update(){
     
     blobPoints[0] = ofVec2f(mouseX, mouseY);
-    ringmaster.update(blobPoints, false); //using Dummy points until CV blobs are implemented
+    ringmaster.update(blobPoints, bTouch); //using Dummy points until CV blobs are implemented
 
 }
 
@@ -42,13 +43,12 @@ void lunarlon::draw(){
 
 }
 
-
-
 //--------------------------------------------------------------
 void lunarlon::keyPressed(int key){
 
     switch (key) {
         case 't':
+            bTouch = !bTouch;
             
             
         default:

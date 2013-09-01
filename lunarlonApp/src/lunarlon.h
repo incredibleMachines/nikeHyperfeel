@@ -21,10 +21,7 @@ class lunarlon : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    
 
-    
-    
     // Styling
     ofImage bg;
     
@@ -32,6 +29,7 @@ class lunarlon : public ofBaseApp{
     RingMaster ringmaster;
     vector<ofVec2f>blobPoints;
 
-    // Fbo
+    // Touch
+    bool bTouch;
 
 };

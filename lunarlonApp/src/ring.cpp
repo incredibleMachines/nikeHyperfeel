@@ -81,7 +81,7 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
         
         ofColor tempColor;
         tempColor.setHsb(78 - 0.3*i, 255, 255-2*i,20);
-        ofSetLineWidth(2);
+        ofSetLineWidth(3);
         mesh.addColor(tempColor);
         mesh.addVertex(particles[i].pos);
     }

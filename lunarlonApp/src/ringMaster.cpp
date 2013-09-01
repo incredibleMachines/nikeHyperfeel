@@ -16,7 +16,7 @@ void RingMaster::setup(){
     //Touch Controls
     bTouch = false;
     counter = 0;
-    touchReactionSpeed = 0.05;
+    touchReactionSpeed = 0.0005;
     bTimerReached = false;
     bStartCount = false;
     
@@ -49,7 +49,10 @@ void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
     //update blobs positions in rings
     for (int i=0; i<rings.size(); i++) {
         rings[i].updateForces(_blobs);
+        rings[i].p2pForceStrength = touch();
     }
+    
+
 }
 
 //--------------------------------------------------------------
@@ -86,7 +89,7 @@ float RingMaster::touch(){
     
     if(bStartCount && bTimerReached){
         counter-=touchReactionSpeed;
-        if (counter<=0) {
+        if (counter<=0.1) {
             bStartCount = false;
             bTimerReached = false;
             bTouch = false;
