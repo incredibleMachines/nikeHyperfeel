@@ -13,6 +13,7 @@
 particle::particle(){
 	setInitialCondition(0,0,0,0,0.3);
 	bFixed = false;
+    damping = 0.3f;
 }
 
 //------------------------------------------------------------
@@ -227,15 +228,15 @@ void particle::addCounterClockwiseForce(particle &p, float radius, float scale){
 }
 
 //------------------------------------------------------------
-void particle::addDampingForce(float _damping){
+void particle::addDampingForce(){
 	
 	// the usual way to write this is  vel *= 0.99
 	// basically, subtract some part of the velocity
 	// damping is a force operating in the oposite direction of the
 	// velocity vector
 	
-    frc.x = frc.x - vel.x * _damping;
-    frc.y = frc.y - vel.y * _damping;
+    frc.x = frc.x - vel.x * damping;
+    frc.y = frc.y - vel.y * damping;
 }
 
 //------------------------------------------------------------

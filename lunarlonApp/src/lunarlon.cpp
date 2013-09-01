@@ -3,7 +3,7 @@
 //--------------------------------------------------------------
 void lunarlon::setup(){
     ofSetVerticalSync(true);
-    ofEnableSmoothing();
+//    ofEnableSmoothing();
     ofSetFrameRate(60);
     int nRings;
     int nParticlesringZero;
@@ -28,7 +28,8 @@ void lunarlon::setup(){
 
 //--------------------------------------------------------------
 void lunarlon::update(){
-
+    
+    blobPoints[0] = ofVec2f(mouseX, mouseY);
     ringmaster.update(blobPoints, false); //using Dummy points until CV blobs are implemented
 
 }

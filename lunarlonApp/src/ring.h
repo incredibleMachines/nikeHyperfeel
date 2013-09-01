@@ -11,7 +11,9 @@
 
 #include <iostream>
 #include "particle.h"
+#include "spring.h"
 #include "ofMain.h"
+
 
 
 class Ring{
@@ -19,7 +21,7 @@ public:
     
     void setup(int _nParticles, ofVec2f _ctr, float _radius, float _springiness, float _distance);
     void setColor(ofColor _color);
-    void updateForces(vector<ofVec2f> blobPos);
+    void updateForces(vector<ofVec2f>_blobs);
     void updateParticles();
     void draw();
     
@@ -30,14 +32,17 @@ public:
     //Base color
     ofColor baseColor;
     
-    //blobs
-    vector<ofVec2f> blobPos;
+    //Blobs
+    vector<ofVec2f> blobs;
     
-    //particles
+    //Particles
     vector<particle>particles;
     float p2pForceRadius;
     float p2pForceStrength;
     float nParticles;
+    
+    //Springs
+    vector<Spring>springs;
 
     
     

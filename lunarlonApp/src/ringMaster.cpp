@@ -33,7 +33,10 @@ void RingMaster::setup(){
     }
     
     for (int i=0; i<rings.size(); i++) {
-        rings[i].setup(10*i, centerOfRings, initRadius * i, particleSpringiness, particleDist);
+        rings[i].setup(nParticlesRingZero*i, centerOfRings, initRadius * i, particleSpringiness, particleDist);
+        rings[i].p2pForceStrength = 0.1;
+        rings[i].p2pForceRadius = 10*i;
+
     }
 
 }
@@ -43,7 +46,11 @@ void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
     bTouch = _bTouch;
     blobs.clear(); // do I have to do this?
     blobs = _blobs;
-
+    
+    //update blobs positions in rings
+    for (int i=0; i<rings.size(); i++) {
+        rings[i].updateForces(_blobs);
+    }
 }
 
 //--------------------------------------------------------------

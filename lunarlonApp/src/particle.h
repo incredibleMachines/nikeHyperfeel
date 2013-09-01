@@ -34,7 +34,7 @@ public:
     void addClockwiseForce(particle &p, float radius, float scale);
     void addCounterClockwiseForce(particle &p, float radius, float scale);
     
-    void addDampingForce(float _damping);
+    void addDampingForce();
     void bounceOffWalls();
     
     void setInitialCondition(float px, float py, float vx, float vy, float _damping);
