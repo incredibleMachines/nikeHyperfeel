@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ring.h"
+#include "ringMaster.h"
 
 class lunarlon : public ofBaseApp{
 
@@ -20,44 +21,17 @@ class lunarlon : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    float touch();
     
-    // Touch Controls
-    bool bTouch;
-    vector<ofVec2f>blobs;
-    float startTime;
-    float endTime;
-    bool bTimerReached;
-    float counter;
-    bool bStartCount;
-    float touchReactionSpeed;
+
     
     
     // Styling
     ofImage bg;
     
-    
-    // Rings
-    vector<Ring>rings;
-    ofVec2f centerOfRings;
+    //ring master
+    RingMaster ringmaster;
+    vector<ofVec2f>blobPoints;
 
-    
-    
-    // Particles
-    float particleDist;
-    float particleSpringiness;
-       
-
-    
     // Fbo
-    
-    
-    
-    // Shader
-    
-    
-    
-    
-    
-		
+
 };
