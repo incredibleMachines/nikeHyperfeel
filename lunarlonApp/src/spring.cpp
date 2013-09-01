@@ -32,7 +32,8 @@ void Spring::update(){
     particleA->addForce(frcToAdd.x, frcToAdd.y);
     particleB->addForce(-frcToAdd.x, -frcToAdd.y);
     
-    
+
+
 }
 
 //------------------------------------------
@@ -47,5 +48,34 @@ void Spring::draw(){
     ofSetColor(color);
     ofLine(particleA->pos,particleB->pos);
     ofPopStyle;
+
+
+
 }
+
+//------------------------------------------
+void Spring::changeColor(ofVec2f _blobPos,float _radius){
+    
+    ofVec2f posOfForce;
+    posOfForce.set(_blobPos);
+    
+    ofVec2f diff	= particleA->pos - posOfForce;
+	float length	= diff.length();
+    
+    bool bAmCloseEnough = true;
+    if (_radius > 0){
+        if (length > _radius){
+            bAmCloseEnough = false;
+        }
+    }
+    
+    if (bAmCloseEnough == true){
+		float pct = 1 - (length / _radius);  // stronger on the inside
+        color.setHsb(170 - 100*pct, 100 + 155*pct, 100 + 155*pct, 220);
+    }
+    
+    
+    
+}
+
 

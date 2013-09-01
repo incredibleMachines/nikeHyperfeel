@@ -3,8 +3,8 @@
 //--------------------------------------------------------------
 void lunarlon::setup(){
     ofSetVerticalSync(true);
-//    ofEnableSmoothing();
     ofSetFrameRate(60);
+    ofEnableAlphaBlending();
     int nRings;
     int nParticlesringZero;
     

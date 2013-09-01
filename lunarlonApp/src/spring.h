@@ -27,13 +27,14 @@ public:
     
     void update();
     void draw();
-    void changeColor(ofVec2f _blobPos);
+    void changeColor(ofVec2f _blobPos,float _radius);
     
     ofVec2f frcToAdd;
     ofColor color;
     
     float lineThickness;
-     
+    
+
 };
 
 

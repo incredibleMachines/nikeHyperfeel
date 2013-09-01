@@ -43,6 +43,8 @@ public:
     
     //Springs
     vector<Spring>springs;
+    ofMesh mesh;
+    
 
     
     
