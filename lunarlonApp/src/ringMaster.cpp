@@ -7,6 +7,7 @@
 //
 
 #include "ringMaster.h"
+#include "lunarlon.h"
 
 //--------------------------------------------------------------
 void RingMaster::setup(){
@@ -16,7 +17,7 @@ void RingMaster::setup(){
     //Touch Controls
     bTouch = false;
     counter = 0;
-    touchReactionSpeed = 0.0005;
+    touchReactionSpeed = 0.0001;
     bTimerReached = false;
     bStartCount = false;
     
@@ -49,10 +50,9 @@ void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
     //update blobs positions in rings
     for (int i=0; i<rings.size(); i++) {
         rings[i].updateForces(_blobs);
-//        rings[i].p2pForceStrength = touch();
+        rings[i].p2pForceStrength = 0.1  + touch()*0.7;
+        rings[i].touchAmt =  touch();
     }
-    
-
 }
 
 //--------------------------------------------------------------
@@ -74,7 +74,7 @@ void RingMaster::draw(){
 
 //--------------------------------------------------------------
 float RingMaster::touch(){
-        
+
     if (bTouch) {
         bStartCount = true;
     }
@@ -92,7 +92,7 @@ float RingMaster::touch(){
         if (counter<=0.1) {
             bStartCount = false;
             bTimerReached = false;
-            bTouch = false;
+            bTouch = ((lunarlon*) ofGetAppPtr())->bTouch  = false;;
         }
     }
     return counter;

@@ -11,6 +11,7 @@
 void Ring::setup(int _nParticles, ofVec2f _ctr, float _radius, float _springiness, float _distance){
     ctr = _ctr;
     radius = _radius;
+    touchAmt = 0;
     
     //Particles
     nParticles = _nParticles;
@@ -79,7 +80,7 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
     // Create Mesh
     for (int i=0; i<particles.size(); i++) {
         ofColor tempColor;
-        tempColor.setHsb(78 - 0.4*i, 255-i/2, 255-i,20);
+        tempColor.setHsb(120 - 0.4*i + 50*touchAmt, 255-i/2, 255-i,20);
         ofSetLineWidth(3);
         mesh.addColor(tempColor);
         mesh.addVertex(particles[i].pos);

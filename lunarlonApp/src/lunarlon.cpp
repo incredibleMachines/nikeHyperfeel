@@ -31,9 +31,6 @@ void lunarlon::setup(){
         users.push_back(tempUser);
         users[i].setup();
     }
-    
-    
-
 }
 
 //--------------------------------------------------------------
@@ -70,8 +67,6 @@ void lunarlon::keyPressed(int key){
     switch (key) {
         case 't':
             bTouch = !bTouch;
-            
-            
         default:
             break;
     }

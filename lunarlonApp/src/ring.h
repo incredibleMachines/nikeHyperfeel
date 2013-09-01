@@ -45,6 +45,9 @@ public:
     vector<Spring>springs;
     ofMesh mesh;
     
+    //Touch controls
+    float touchAmt;
+    
 
     
     
