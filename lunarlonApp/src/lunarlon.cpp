@@ -67,7 +67,12 @@ void lunarlon::keyPressed(int key){
     switch (key) {
         case 't':
             bTouch = !bTouch;
-        default:
+            break;
+            
+        case 'r':
+            for (int i=0; i<blobPoints.size(); i++) {
+                blobPoints[i].set(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()));
+            }
             break;
     }
 }

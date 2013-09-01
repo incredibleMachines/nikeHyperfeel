@@ -7,7 +7,7 @@
 //
 
 #include "ringMaster.h"
-#include "lunarlon.h"
+#include "lunarlon.h" //we include this to get a pointer to main app.Should NOT be included in the .h file!!!
 
 //--------------------------------------------------------------
 void RingMaster::setup(){
@@ -92,7 +92,7 @@ float RingMaster::touch(){
         if (counter<=0.1) {
             bStartCount = false;
             bTimerReached = false;
-            bTouch = ((lunarlon*) ofGetAppPtr())->bTouch  = false;;
+            bTouch = ((lunarlon*) ofGetAppPtr())->bTouch  = false; // pointer to bTouch on lunarlon.cpp
         }
     }
     return counter;

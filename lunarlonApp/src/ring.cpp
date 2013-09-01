@@ -43,7 +43,7 @@ void Ring::setup(int _nParticles, ofVec2f _ctr, float _radius, float _springines
         particles[particles.size()-1].bFixed = true;
 	}
     
-    // Mesh (Spring lines)
+    // Mesh Mode (For Spring Fills)
     mesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
 }
 
@@ -81,7 +81,6 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
     for (int i=0; i<particles.size(); i++) {
         ofColor tempColor;
         tempColor.setHsb(120 - 0.4*i + 50*touchAmt, 255-i/2, 255-i,20);
-        ofSetLineWidth(3);
         mesh.addColor(tempColor);
         mesh.addVertex(particles[i].pos);
     }
@@ -90,7 +89,7 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
     for (int i=0; i<springs.size(); i++) {
         springs[i].update();
         ofColor tempColor;
-        tempColor.setHsb(78 - 0.3*i, 255, 255,200);
+        tempColor.setHsb(78 - 0.3*i - 30*touchAmt, 255, 255,200);
 
         springs[i].color = tempColor;
     }
@@ -119,7 +118,6 @@ void Ring::draw(){
         particles[i].draw();
     }
     
-
 //    mesh.drawWireframe();
     
 }
