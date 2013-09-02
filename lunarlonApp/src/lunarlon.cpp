@@ -70,7 +70,7 @@ void lunarlon::setup(){
     stageState = 1; //0=camera raw; 1=CV debug; 2=LIVE
     
     //--- debuggin
-    mouseAsBlob = false; //for debug purposes
+    mouseAsBlob = true; //for debug purposes
     nMouseBlobs = 3; //supports up to 4 only!
 }
 
