@@ -12,53 +12,335 @@ void lunarlon::setup(){
     ofBackground(0);
     bg.loadImage("bg_1.jpg");
     
-    //Dummy blob points, remove when CV is implemeted !!
-    for(int i=0; i< 6;i++){
-        ofVec2f temp;
-        temp.set(ofRandom(ofGetWidth()), ofRandom(100,ofGetHeight()));
-        blobPoints.push_back(temp);
-    }
-    
     //RingMaster
     ringmaster.setup();
     
     //Touch
     bTouch = false;
     
-    //Users
-    for(int i=0; i<blobPoints.size();i++){
-        User tempUser;
-        users.push_back(tempUser);
-        users[i].setup();
-    }
+    //--- syphon
+    tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
+    
+    //--- settings
+    XML.loadFile("xml/settings.xml");
+    admin.setup();                      //-- admin gui
+    
+    //--- camera
+    camWidth = 320;//640;
+    camHeight = 240;//480;
+    
+    camZoom.x=1000;
+    camZoom.y=600;
+    camOffset.x=-375;
+    camOffset.y=-150 ;
+    
+    camera.setup(camWidth, camHeight);  //-- ofxPs3Eye
+    camera.ps3eye.setBrightness(admin.gui.getValueF("CAM1:BRIGHTNESS"));
+    camera.ps3eye.setGamma(admin.gui.getValueF("CAM1:GAMMA"));
+    camera.ps3eye.setContrast(admin.gui.getValueF("CAM1:CONTRAST"));
+    camera.ps3eye.setHue(admin.gui.getValueF("CAM1:HUE"));
+    threshold = admin.gui.getValueF("CAM1:THRESH");
+    
+    stageCenterX = ofGetWidth()/2;
+    stageCenterY = ofGetHeight()/2;
+    stagingX = camOffset.x; //stageCenterX-stageWidth/2;
+    stagingY = camOffset.y; //stageCenterY-stageHeight/2;
+    offset = 150;
+    
+    colorImg.allocate(camWidth,camHeight);
+	grayImage.allocate(camWidth,camHeight);
+	grayBg.allocate(camWidth,camHeight);
+	grayDiff.allocate(camWidth,camHeight);
+    
+    stageWidth = ofGetWidth()+camZoom.x;//960;
+    stageHeight = ofGetHeight()+camZoom.y;//960;
+    
+    colorImgStage.allocate(stageWidth,stageHeight);
+	grayImageStage.allocate(stageWidth,stageHeight);
+	grayBgStage.allocate(stageWidth,stageHeight);
+	grayDiffStage.allocate(stageWidth,stageHeight);
+    
+	bLearnBakground = false;
+    blobDist = 100; //distance in pixels under which blobs will be combined/ignored
+    
+    
+    //loadLatestBgCapture(); //pull last captured BG image from file!
+    
+    //--- staging, pagination
+    stageState = 1; //0=camera raw; 1=CV debug; 2=LIVE
+    
+    //--- debuggin
+    mouseAsBlob = false; //for debug purposes
+    nMouseBlobs = 3; //supports up to 4 only!
 }
 
 //--------------------------------------------------------------
 void lunarlon::update(){
     
-    blobPoints[0] = ofVec2f(mouseX, mouseY);
-    ringmaster.update(blobPoints, bTouch); //using Dummy points(blobPoints) until CV blobs are implemented
+    if (camera.update()){ //returns true if frame is new
+        
+        if(stageState == 1){
+            colorImg.setFromPixels(camera.getPixels(), camWidth, camHeight);
+            
+            grayImage = colorImg;
+            if (bLearnBakground == true){
+                grayBg = grayImage;		// the = sign copys the pixels from grayImage into grayBg (operator overloading)
+                
+                colorImgStage=colorImg;
+                colorImgStage.resize(stageWidth, stageHeight);
+                grayImageStage.resize(colorImgStage.width, colorImgStage.height);
+                grayImageStage = colorImgStage;
+                grayBgStage.resize(grayImageStage.width, grayImageStage.height);
+                grayBgStage = grayImageStage;
+                
+                /*** save this new bg image to file! ***/
+                ofImage backgroundImg;
+                backgroundImg.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
+                string archiveFileName = "bg_background_capture_"+ofGetTimestampString()+".png"; //dated
+                string fileName = "bg_latestBackgroundCapture.png"; //static name
+                backgroundImg.saveImage(fileName);
+                backgroundImg.saveImage(archiveFileName);
+                cout<<"SAVED BG IMAGE: "<< archiveFileName << endl;
+                
+                bLearnBakground = false;
+            }
+            
+            // take the abs value of the difference between background and incoming and then threshold:
+            grayDiff.absDiff(grayBg, grayImage);
+            grayDiff.threshold(threshold);
+            
+            // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
+            // also, find holes is set to true so we will get interior contours as well....
+            contourFinder.findContours(grayDiff, 20, (camWidth*camHeight)/3, 10, true);	// find holes
+        }
+        
+        else if (stageState == 2||stageState==0){
+            colorImgStage.setFromPixels(camera.getPixels(), camWidth, camHeight);
+            colorImgStage.resize(stageWidth, stageHeight);
+            
+            grayImageStage.resize(colorImgStage.width, colorImgStage.height);
+            grayImageStage = colorImgStage;
+            
+            // take the abs value of the difference between background and incoming and then threshold:
+            grayDiffStage.resize(grayImageStage.width, grayImageStage.height);
+            grayDiffStage.absDiff(grayBgStage, grayImageStage);
+            grayDiffStage.threshold(threshold);
+            
+            contourFinderStage.findContours(grayDiffStage, 20, (stageWidth*stageHeight)/3, 10, true);	// find holes
+        }
+	}
     
+    blobs.clear();
+    blobPoints.clear();
+    
+    for (int i = 0; i < contourFinderStage.nBlobs; i++){ //for every blob
+        float distFromCenter = ofDist(contourFinderStage.blobs[i].centroid.x+stagingX,
+                                      contourFinderStage.blobs[i].centroid.y+stagingY, stageCenterX, stageCenterY);
+        ofPoint blobClosest;
+        //cout<<"BLOB # " << i << " distFromCenter: "<< distFromCenter << endl; //---> sanity check
+        //            cout<<"BLOB # " << i << " ZONE # "<< j << endl;
+        //            Player thisPlayer;
+        //            thisPlayer.setPlayer(i, j, 0);
+        //            players.push_back(thisPlayer);
+        
+        contourFinderStage.blobs[i].draw( stagingX, stagingY ); //draw this blob on the stage
+        
+        bool bNewBlob=true;
+        
+        for(int j=0; j<blobs.size();j++){
+            if (ofDist(contourFinderStage.blobs[i].centroid.x,
+                       contourFinderStage.blobs[i].centroid.y, blobs[j].blob.centroid.x, blobs[j].blob.centroid.y)<blobDist)
+            {
+                bNewBlob=false;
+                if(distFromCenter<blobs[j].centroidDist){
+                    blobs[j].blob=contourFinderStage.blobs[i];
+                    blobs[j].centroidDist=distFromCenter;
+                    float blobCenterDist;
+                    for(int k=0;k<blobs[j].blob.nPts;k++){
+                        if(k==0){
+                            blobCenterDist=ofDist(blobs[j].blob.pts[k].x+stagingX,
+                                                  blobs[j].blob.pts[k].y+stagingY, stageCenterX, stageCenterY);
+                            blobClosest.x=blobs[j].blob.pts[k].x+stagingX;
+                            blobClosest.y=blobs[j].blob.pts[k].y+stagingY;
+                        }
+                        float currentCenterDist=ofDist(blobs[j].blob.pts[k].x+stagingX,
+                                                       blobs[j].blob.pts[k].y+stagingY, stageCenterX, stageCenterY);
+                        if(currentCenterDist<blobCenterDist){
+                            blobCenterDist=currentCenterDist;
+                            blobClosest.x=blobs[j].blob.pts[k].x+stagingX;
+                            blobClosest.y=blobs[j].blob.pts[k].y+stagingY;
+                            
+                        }
+                    }
+                    blobs[j].closest=blobClosest;
+                }
+            }
+        }
+        
+        if(bNewBlob==true){
+            Blob tempBlob;
+            tempBlob.blob=contourFinderStage.blobs[i];
+            tempBlob.centroidDist=distFromCenter;
+            float blobCenterDist;
+            for(int k=0;k<tempBlob.blob.nPts;k++){
+                if(k==0){
+                    blobCenterDist=ofDist(tempBlob.blob.pts[k].x+stagingX,
+                                          tempBlob.blob.pts[k].y+stagingY, stageCenterX, stageCenterY);
+                    blobClosest.x=tempBlob.blob.pts[k].x+stagingX;
+                    blobClosest.y=tempBlob.blob.pts[k].y+stagingY;
+                }
+                float currentCenterDist=ofDist(tempBlob.blob.pts[k].x+stagingX,
+                                               tempBlob.blob.pts[k].y+stagingY, stageCenterX, stageCenterY);
+                if(currentCenterDist<blobCenterDist){
+                    blobCenterDist=currentCenterDist;
+                    blobClosest.x=tempBlob.blob.pts[k].x+stagingX;
+                    blobClosest.y=tempBlob.blob.pts[k].y+stagingY;
+                    
+                }
+            }
+            tempBlob.closest=blobClosest;
+            blobs.push_back(tempBlob);
+        }
+        
+        
+        int blue = ofMap(distFromCenter, 50, stageWidth/2, 0, 255);
+        int red =ofMap(distFromCenter, 50, stageWidth/2, 255, 0);
+        ofSetColor(red,0,blue);
+        ofFill();
+        ofEllipse(contourFinderStage.blobs[i].centroid.x + stagingX, contourFinderStage.blobs[i].centroid.y + stagingY, 50, 50); //draw ID circles
+        ofSetColor(255);
+        ofDrawBitmapString(ofToString(i), contourFinderStage.blobs[i].centroid.x+ stagingX, contourFinderStage.blobs[i].centroid.y + stagingY); //draw ID number
+    }
+    
+    //--- debuggin
+    if(mouseAsBlob){
+        blobPoints.clear();
+        for (int i=0; i<nMouseBlobs; i++){
+            int thisX = mouseX;
+            int thisY = mouseY;
+            ofVec2f mouse;
+            if(i == 0){
+            } else if (i==1){
+                thisX = ofGetWidth() - mouseX;
+                thisY = ofGetHeight() - mouseY;
+            } else if (i==2){
+                thisX = ofGetWidth() - mouseX;
+            } else if(i ==3){
+                thisY = ofGetHeight() - mouseY;
+            } else break;
+            mouse.set(thisX, thisY);
+            //blobPoints[i] = ofVec2f(thisX, thisY);
+            blobPoints.push_back(mouse);
+        }
+    }
+    //-------- let's do this
+    else { 
+        //blobPoints.clear();
+        for(int j=0; j<blobs.size();j++){
+            ofVec2f thisBlob;
+            thisBlob.set(blobs[j].closest.x,blobs[j].closest.y);
+            blobPoints.push_back(thisBlob);
+        }
+    }
+    
+    ringmaster.update(blobPoints, bTouch);
     
     //Update user graphics
+    users.clear();
     for(int i=0; i<blobPoints.size();i++){
+        User tempUser;
+        users.push_back(tempUser);
+        users[i].setup();
         users[i].updatePosition(blobPoints[i]);
     }
-
+    
+    cout<<"blobPoints.size(): "<<blobPoints.size()<<endl;
+    
+    if(bDrawAdmin) {
+        admin.update();
+        camera.ps3eye.setBrightness(admin.gui.getValueF("CAM1:BRIGHTNESS"));
+        
+        //    gain1=gui.getValueF("CAM1:GAIN:CURRENT");
+        camera.ps3eye.setGamma(admin.gui.getValueF("CAM1:GAMMA"));
+        //    shutter1=gui.getValueF("CAM1:SHUTTER:CURRENT");
+        camera.ps3eye.setContrast(admin.gui.getValueF("CAM1:CONTRAST"));
+        camera.ps3eye.setHue(admin.gui.getValueF("CAM1:HUE"));
+        threshold=admin.gui.getValueF("CAM1:THRESH");
+    }
 }
 
 //--------------------------------------------------------------
 void lunarlon::draw(){
-    ofSetWindowTitle(ofToString(ofGetFrameRate()));
-    bg.draw(0,0);
     
-    //Draw user graphics
-    for(int i=0; i<blobPoints.size();i++){
-        users[i].draw();
+    ofSetWindowTitle(ofToString(ofGetFrameRate()));
+    
+    ofBackground(10,10,10);
+    //------------------------- debug camera view -- raw camera input
+    if (stageState == 0){
+        camera.draw(stagingX, stagingY, stageWidth, stageHeight);
+        for(int j=0;j<blobPoints.size();j++){
+            blobs[j].blob.draw();
+            ofFill();
+            ofSetColor(255,0,0);
+            ofEllipse(blobPoints[j].x, blobPoints[j].y,10,10);
+        }
+    }
+    //------------------------- debug image processing
+    else if(stageState == 1){
+        // draw the incoming, the grayscale, the bg and the thresholded difference
+        ofSetHexColor(0xffffff);
+        colorImg.draw(20,20);
+        grayImage.draw(360,20);
+        grayBg.draw(20,280);
+        grayDiff.draw(360,280);
+        
+        
+        // then draw the contours:
+        ofFill();
+        ofSetHexColor(0x333333);
+        ofRect(360,540,320,240);
+        ofSetHexColor(0xffffff);
+        
+        // we could draw the whole contour finder
+        //contourFinder.draw(360,540);
+        
+        // or, instead we can draw each blob individually from the blobs vector,
+        // this is how to get access to them:
+        for (int i = 0; i < contourFinder.nBlobs; i++){
+            contourFinder.blobs[i].draw(360,540);
+            
+            // draw over the centroid if the blob is a hole
+            ofSetColor(255);
+            if(contourFinder.blobs[i].hole){
+                ofDrawBitmapString("hole",
+                                   contourFinder.blobs[i].boundingRect.getCenter().x + 360,
+                                   contourFinder.blobs[i].boundingRect.getCenter().y + 540);
+            }
+        }
+        
+        // finally, a report:
+        ofSetHexColor(0xffffff);
+        stringstream reportStr;
+        reportStr << "bg subtraction and blob detection" << endl
+        << "press 'b' to capture bg" << endl
+        << "num blobs found " << contourFinder.nBlobs << ", fps: " << ofGetFrameRate();
+        ofDrawBitmapString(reportStr.str(), 20, 600);
     }
     
-    ringmaster.draw();
-
+    
+    //--- draw rings, user animation ---
+    else if(stageState == 2){
+        bg.draw(0,0);
+        
+        //Draw user graphics
+        for(int i=0; i<blobPoints.size();i++){
+            users[i].draw();
+        }
+        
+        ringmaster.draw();
+    }
+    
+    if(bDrawAdmin) admin.draw();
 }
 
 //--------------------------------------------------------------
@@ -74,45 +356,118 @@ void lunarlon::keyPressed(int key){
                 blobPoints[i].set(ofRandom(ofGetWidth()), ofRandom(ofGetHeight()));
             }
             break;
+
+		case 'b':
+            //---camera.saveBackgroundCaptureImg();
+            //---loadLatestBgCapture();
+			bLearnBakground = true;
+			break;
+            
+        case ' ':
+            stageState++;
+            if (stageState>2) stageState = 0;
+            cout<<"stageState: "<<stageState<<endl;
+            break;
+            
+        case 'c':
+            camera.printCurrentSettings();
+            break;
+            
+        case '`':
+            bDrawAdmin = !bDrawAdmin;
+            cout<<"bDrawAdmin = "<<bDrawAdmin<<endl;
+            break;
+            
+        case 'm':
+            mouseAsBlob = !mouseAsBlob; //use mouse as a blob
+            break;
+            
+//        case 'r':
+//            //stage.toggleTranslucentMode();
+//            break;
+            
+	}
+    
+    if(bDrawAdmin){
+        admin.keyPressed(key);
     }
 }
 
 //--------------------------------------------------------------
 void lunarlon::keyReleased(int key){
-
+    if(bDrawAdmin){
+        admin.keyReleased(key);
+    }
+    
 }
 
 //--------------------------------------------------------------
-void lunarlon::mouseMoved(int x, int y ){
-
+void lunarlon::mouseMoved(int x, int y){
+    if(bDrawAdmin){
+        admin.mouseMoved(x,y);
+    }
+    
 }
 
 //--------------------------------------------------------------
 void lunarlon::mouseDragged(int x, int y, int button){
-
+    if(bDrawAdmin){
+        admin.mouseDragged(x,y,button);
+    }
+//    selectedCorner = -1;
+//    for (int i=0; i<4; i++) {
+//        if (ofDist(corners[i].x, corners[i].y, x-30, y-30)<10) {
+//            selectedCorner = i;
+//        }
+//    }
 }
 
 //--------------------------------------------------------------
 void lunarlon::mousePressed(int x, int y, int button){
-
+    if(bDrawAdmin){
+        admin.mousePressed(x,y,button);
+    }
+//    corners[selectedCorner].set(x-30,y-30);
 }
 
 //--------------------------------------------------------------
 void lunarlon::mouseReleased(int x, int y, int button){
-
+    if(bDrawAdmin){
+        admin.mouseReleased(x,y,button);
+    }
+    //selectedCorner = -1;
 }
 
 //--------------------------------------------------------------
 void lunarlon::windowResized(int w, int h){
-
+    
 }
 
 //--------------------------------------------------------------
 void lunarlon::gotMessage(ofMessage msg){
-
+    
 }
 
 //--------------------------------------------------------------
-void lunarlon::dragEvent(ofDragInfo dragInfo){ 
-
+void lunarlon::dragEvent(ofDragInfo dragInfo){
+    
 }
+
+//void lunarlon::loadLatestBgCapture(){
+//    
+//    capturedBgImage.loadImage("bg_latestBackgroundCapture.png"); //load latest
+//    ofxCvColorImage tmpBg;
+//    tmpBg.setFromPixels(capturedBgImage.getPixels(), 320, 240);  //set into cvColorImage
+//    grayImage.setFromColorImage(tmpBg);                          //set grayImage to our bg
+//    grayBg = grayImage;		// the = sign copys the pixels from grayImage into grayBg (operator overloading)
+//    
+//    colorImgStage=colorImg;
+//    colorImgStage.resize(stageWidth, stageHeight);
+//    grayImageStage.resize(colorImgStage.width, colorImgStage.height);
+//    grayImageStage = colorImgStage;
+//    grayBgStage.resize(grayImageStage.width, grayImageStage.height);
+//    grayBgStage = grayImageStage;
+//    
+//    bLearnBakground = false;
+//}
+
