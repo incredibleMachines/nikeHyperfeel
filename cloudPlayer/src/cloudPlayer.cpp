@@ -72,10 +72,6 @@ void cloudPlayer::draw(){
         
     }
 
-    if(cloudMovie.getIsMovieDone()){
-        ofSetHexColor(0xFF0000);
-        ofDrawBitmapString("end of movie",20,440);
-    }
 }
     
     //--------------------------------------------------------------

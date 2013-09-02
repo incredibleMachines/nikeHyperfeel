@@ -2,12 +2,13 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
+#include "ofxMidi.h"
 
-#define HOST "localhost"
 #define PORT 12345
+#define START_PITCH 44
 
 //--------------------------------------------------------
-class cloudSender : public ofBaseApp {
+class cloudSender : public ofBaseApp, public ofxMidiListener {
 
 	public:
 
@@ -26,6 +27,14 @@ class cloudSender : public ofBaseApp {
 		void gotMessage(ofMessage msg);
 
 		ofxOscSender sender;
+    string host;
+    
+    void newMidiMessage(ofxMidiMessage& eventArgs);
+	
+	stringstream text;
+	
+	ofxMidiIn midiIn;
+	ofxMidiMessage midiMessage;
 
 };
 
