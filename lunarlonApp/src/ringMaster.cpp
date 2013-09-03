@@ -15,11 +15,11 @@ void RingMaster::setup(){
     centerOfRings.set(ofGetWidth()/2, 50);
     
     //Touch Controls
-    bTouch = false;
-    counter = 0;
-    touchReactionSpeed = 0.0005;
-    bTimerReached = false;
-    bStartCount = false;
+//    bTouch = false;
+//    counter = 0;
+//    touchReactionSpeed = 0.0005;
+//    bTimerReached = false;
+//    bStartCount = false;
     
     //Rings
     nRings = 50;
@@ -44,15 +44,14 @@ void RingMaster::setup(){
 
 //--------------------------------------------------------------
 void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
-    bTouch = _bTouch;
     blobs.clear(); // do I have to do this?
     blobs = _blobs;
     
     //update blobs positions in rings
     for (int i=0; i<rings.size(); i++) {
         rings[i].updateForces(_blobs);
-        rings[i].p2pForceStrength = 0.1  + touch()*1.5;
-        rings[i].touchAmt =  touch();
+        rings[i].p2pForceStrength = 0.1  + ((lunarlon*) ofGetAppPtr())->TouchReactionAmt*1.5;
+        rings[i].touchAmt =  ((lunarlon*) ofGetAppPtr())->TouchReactionAmt;
     }
 }
 
@@ -76,28 +75,3 @@ void RingMaster::draw(){
 
 }
 
-//--------------------------------------------------------------
-float RingMaster::touch(){
-
-    if (bTouch) {
-        bStartCount = true;
-    }
-    
-    if (bStartCount && !bTimerReached) {
-        counter+=touchReactionSpeed;
-    }
-    
-    if (counter>=1) {
-        bTimerReached = true;
-    }
-    
-    if(bStartCount && bTimerReached){
-        counter-=touchReactionSpeed;
-        if (counter<=0.1) {
-            bStartCount = false;
-            bTimerReached = false;
-            bTouch = ((lunarlon*) ofGetAppPtr())->bTouch  = false; // pointer to bTouch on lunarlon.cpp
-        }
-    }
-    return counter;
-}

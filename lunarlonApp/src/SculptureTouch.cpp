@@ -35,11 +35,16 @@ void SculptureTouch::setup(){
     lines.clear();
     ofPolyline line;
     line.setClosed(true);
-    line.addVertex(411+xOffset,0+yOffset);
-    line.addVertex(227+xOffset,0+yOffset);
-    line.bezierTo(227+xOffset,0+yOffset,204+xOffset,61+yOffset,266+xOffset,63+yOffset);
-    line.bezierTo(292+xOffset,64+yOffset,333+xOffset,52+yOffset,358+xOffset,71+yOffset);
-    line.bezierTo(380+xOffset,88+yOffset,435+xOffset,70+xOffset,411+xOffset,0+yOffset);
+    line.addVertex(426,417);
+    line.addVertex(653,417);
+    line.addVertex(653,358);
+    line.addVertex(632,189);
+    line.addVertex(693,114);
+    line.addVertex(693,35);
+    line.addVertex(386,35);
+    line.addVertex(386,104);
+    line.addVertex(444,189);
+    line.addVertex(426,352);
     line.simplify();
     lines.push_back(line);
     

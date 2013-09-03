@@ -43,6 +43,8 @@ class lunarlon : public ofBaseApp{
     void sendTouch();
     void sendOff();
     void receiveTouch();
+    float animateTouch(); //touch reaction triggering function
+
     
 
     // Styling
@@ -57,6 +59,16 @@ class lunarlon : public ofBaseApp{
     
     // Touch
     bool bTouch;
+    
+    // Touch animation
+    float startTime;
+    float endTime;
+    bool bTimerReached;
+    float counter;
+    bool bStartCount;
+    float touchReactionSpeed;
+    float  TouchReactionAmt;
+    
     
     //--- stage state - what page are we looking at
     int stageState;

@@ -23,6 +23,14 @@ void lunarlon::setup(){
     bTouch = false;
     sculpture.setup();
     
+    //--- touch animation
+    counter = 0;
+    touchReactionSpeed = 0.005;
+    TouchReactionAmt = 0;
+    bTimerReached = false;
+    bStartCount = false;
+
+    
     //--- settings
     XML.loadFile("xml/settings.xml");
     admin.setup();                      //-- admin gui
@@ -88,6 +96,9 @@ void lunarlon::update(){
             }
         }
     }
+    
+    //--- touch animation
+    TouchReactionAmt = animateTouch();
     
     if (camera.update()){ //returns true if frame is new
             colorImg.setFromPixels(camera.getPixels(), camWidth, camHeight);
@@ -328,6 +339,9 @@ void lunarlon::draw(){
         
         //--- sculpture
         sculpture.draw();
+        
+        // report touch animation amount
+        ofDrawBitmapString(ofToString(TouchReactionAmt), 100,200);
     }
     
     //--- syphon
@@ -480,6 +494,34 @@ void lunarlon::receiveTouch(){
     bTouch=!bTouch;
     
 }
+
+//--------------------------------------------------------------
+float lunarlon::animateTouch(){
+    
+    if (bTouch) {
+        bStartCount = true;
+    }
+    
+    if (bStartCount && !bTimerReached) {
+        counter+=touchReactionSpeed;
+    }
+    
+    if (counter>=1) {
+        bTimerReached = true;
+    }
+    
+    if(bStartCount && bTimerReached){
+        counter-=touchReactionSpeed;
+        if (counter<=0.1) {
+            bStartCount = false;
+            bTimerReached = false;
+//            bTouch = false;
+        }
+    }
+    return counter;
+}
+
+
 
 //void lunarlon::loadLatestBgCapture(){
 //    

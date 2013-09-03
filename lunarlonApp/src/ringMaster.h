@@ -34,14 +34,14 @@ public:
     float particleSpringiness;
     
     // Touch Controls
-    bool bTouch;
+//    bool bTouch;
     vector<ofVec2f>blobs;
-    float startTime;
-    float endTime;
-    bool bTimerReached;
-    float counter;
-    bool bStartCount;
-    float touchReactionSpeed;
+//    float startTime;
+//    float endTime;
+//    bool bTimerReached;
+//    float counter;
+//    bool bStartCount;
+//    float touchReactionSpeed;
     
 };
 
