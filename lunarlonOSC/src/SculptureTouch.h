@@ -21,7 +21,7 @@ class SculptureTouch {
 public:
     void setup();
     void update();
-    void draw();
+    void draw(ofColor color);
     void sendTouch();
     
     bool bTouch;

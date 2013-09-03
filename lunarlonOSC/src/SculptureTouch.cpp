@@ -59,15 +59,13 @@ void SculptureTouch::update(){
 }
 
 //--------------------------------------------------------------
-void SculptureTouch::draw(){
+void SculptureTouch::draw(ofColor color){
     if(bTouch){
         ofSetColor(255);
         ofDrawBitmapString("TOUCH ON", 50,50);
-
-        ofSetColor(200, 50, 50);
-    } else {
-        ofSetColor(50, 50, 200);
     }
+    
+            ofSetColor(color);
         
     for(int i=0; i<lines.size(); i++){
         ofBeginShape();

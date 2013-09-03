@@ -54,7 +54,7 @@ void lunarlonStatue::draw(){
     
     ofColor bgColor;
     bgColor.setHsb(78, 100 + 155*touch(), 255*touch());
-    ofBackground(bgColor);
+    ofBackground(0);
 
 	// display instructions
 	string buf;
@@ -63,7 +63,7 @@ void lunarlonStatue::draw(){
     buf = "receiving osc message" + message+" from "+ string("192.168.1.10") + ofToString(RECEIVE_PORT);
 	ofDrawBitmapString(buf, 10, 40);
     
-    sculpture.draw();
+    sculpture.draw(bgColor);
 }
 
 //--------------------------------------------------------------
@@ -81,7 +81,7 @@ float lunarlonStatue::touch(){
         bTimerReached = true;
     }
     
-    if(bStartCount && bTimerReached){
+    if(!bTouched && bTimerReached){
         counter-=touchReactionSpeed;
         if (counter<=0.1) {
             bStartCount = false;
