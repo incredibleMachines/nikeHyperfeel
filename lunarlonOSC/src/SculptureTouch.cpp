@@ -7,7 +7,7 @@
 //
 
 #include "SculptureTouch.h"
-//#include "testApp.h"
+#include "lunarlonStatue.h"
 
 //--------------------------------------------------------------
 void SculptureTouch::setup(){
@@ -30,7 +30,6 @@ void SculptureTouch::setup(){
     line.addVertex(444,189);
     line.addVertex(426,352);
 
-    line.simplify();
     lines.push_back(line);
 
     ofFill();   
@@ -39,22 +38,24 @@ void SculptureTouch::setup(){
 //--------------------------------------------------------------
 void SculptureTouch::update(){
     
-//    pts = ((testApp *)ofGetAppPtr())->blobPoints; //update vector of all current points (blob positions)
-    cout<<"pts.size(): "<<pts.size()<<endl;
+    pts = ((lunarlonStatue *)ofGetAppPtr())->blobPoints; //update vector of all current points (blob positions)
+//    cout<<"pts.size(): "<<pts.size()<<endl;
     
     for (int j=0; j<pts.size(); j++){
-                
-        for (int i=0; i<lines.size(); i++){
-            if (ofInsidePoly(pts[j],lines[i].getVertices())){
-
-                bTouch = true;
-                
-                // >>> SEND TOUCH EVENT HERE
-                
-            } else {
-                bTouch = false;
-            }
+//        cout<<"j: "<<j<<"  pts.x: "<<pts[j].x<<endl;
+//        cout<<"j: "<<j<<"  pts.y: "<<pts[j].y<<endl;
+        
+        //for (int i=0; i<lines.size(); i++){
+        if (ofInsidePoly(pts[j],lines[0].getVertices())){
+            
+            ((lunarlonStatue *)ofGetAppPtr())->bTouched = true;
+            ((lunarlonStatue *)ofGetAppPtr())->sendTouch();
+            
+        } else {
+            ((lunarlonStatue *)ofGetAppPtr())->bTouched = false;
+            ((lunarlonStatue *)ofGetAppPtr())->sendOff();
         }
+        //}
     }
 }
 

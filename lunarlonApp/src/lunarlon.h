@@ -122,7 +122,7 @@ class lunarlon : public ofBaseApp{
 	ofxSyphonServer mainOutputSyphonServer;
 	ofxSyphonServer individualTextureSyphonServer;
     
-    //--- OSC
+    //--- OSC communication with lunarlonOSC
     ofxOscSender touchSend;
     ofxOscReceiver touchReceive;
     

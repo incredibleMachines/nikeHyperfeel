@@ -6,7 +6,7 @@ void lunarlon::setup(){
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
 
-    	touchSend.setup("192.168.0.55", SEND_PORT);
+    	touchSend.setup("192.168.0.101", SEND_PORT);
         touchReceive.setup( RECEIVE_PORT);
     
     int nRings;
