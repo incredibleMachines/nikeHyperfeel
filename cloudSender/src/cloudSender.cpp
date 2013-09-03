@@ -4,10 +4,18 @@
 void cloudSender::setup(){
 
 	ofBackground(0, 0, 0);
-
-    host= "192.168.0.1";
+    
+    host[0]="192.168.0.55";
+    host[1]="192.168.1.10";
+    host[2]="192.168.1.10";
+    host[3]="192.168.0.101";
+    
+    
 	// open an outgoing connection to HOST:PORT
-	sender.setup(host, PORT);
+	one.setup(host[0], PORT);
+    two.setup(host[1], PORT);
+    three.setup(host[2], PORT);
+    four.setup(host[3], PORT);
     
     // print input ports to console
 	midiIn.listPorts(); // via instance
@@ -38,7 +46,7 @@ void cloudSender::update(){
 void cloudSender::draw(){
 	// display instructions
 	string buf;
-	buf = "sending osc messages to" + string(host) + ofToString(PORT);
+	buf = "sending osc messages to" + string(host[0]) + ", " + string(host[1]) + ", " + string(host[2]) + ", " + string(host[3]) + ofToString(PORT);
 	ofDrawBitmapString(buf, 10, 20);
     
     // draw the last recieved message contents to the screen
@@ -86,25 +94,25 @@ void cloudSender::keyPressed(int key){
 		ofxOscMessage m;
 		m.setAddress("/on");
 		m.addIntArg(1);
-		sender.sendMessage(m);
+		one.sendMessage(m);
 	}
     if(key == '2'){
 		ofxOscMessage m;
 		m.setAddress("/on");
 		m.addIntArg(2);
-		sender.sendMessage(m);
+		two.sendMessage(m);
 	}
     if(key == '3'){
 		ofxOscMessage m;
 		m.setAddress("/on");
 		m.addIntArg(3);
-		sender.sendMessage(m);
+		three.sendMessage(m);
 	}
     if(key == '4'){
 		ofxOscMessage m;
 		m.setAddress("/on");
 		m.addIntArg(4);
-		sender.sendMessage(m);
+		four.sendMessage(m);
 	}
 }
 
@@ -114,25 +122,25 @@ void cloudSender::keyReleased(int key){
 		ofxOscMessage m;
 		m.setAddress("/off");
 		m.addIntArg(1);
-		sender.sendMessage(m);
+		one.sendMessage(m);
 	}
     if(key == '2'){
 		ofxOscMessage m;
 		m.setAddress("/off");
 		m.addIntArg(2);
-		sender.sendMessage(m);
+		two.sendMessage(m);
 	}
     if(key == '3'){
 		ofxOscMessage m;
 		m.setAddress("/off");
 		m.addIntArg(3);
-		sender.sendMessage(m);
+		three.sendMessage(m);
 	}
     if(key == '4'){
 		ofxOscMessage m;
 		m.setAddress("/off");
 		m.addIntArg(4);
-		sender.sendMessage(m);
+		four.sendMessage(m);
 	}
 }
 
@@ -183,25 +191,25 @@ void cloudSender::newMidiMessage(ofxMidiMessage& msg) {
             ofxOscMessage m;
             m.setAddress("/on");
             m.addIntArg(1);
-            sender.sendMessage(m);
+            one.sendMessage(m);
         }
         else if(msg.pitch == START_PITCH+1){
             ofxOscMessage m;
             m.setAddress("/on");
             m.addIntArg(2);
-            sender.sendMessage(m);
+            two.sendMessage(m);
         }
         else if(msg.pitch == START_PITCH+2){
             ofxOscMessage m;
             m.setAddress("/on");
             m.addIntArg(3);
-            sender.sendMessage(m);
+            three.sendMessage(m);
         }
         else if(msg.pitch == START_PITCH+3){
             ofxOscMessage m;
             m.setAddress("/on");
             m.addIntArg(4);
-            sender.sendMessage(m);
+            four.sendMessage(m);
         }
     }
     
@@ -210,25 +218,25 @@ void cloudSender::newMidiMessage(ofxMidiMessage& msg) {
             ofxOscMessage m;
             m.setAddress("/off");
             m.addIntArg(1);
-            sender.sendMessage(m);
+            one.sendMessage(m);
         }
         else if(msg.pitch == START_PITCH+1){
             ofxOscMessage m;
             m.setAddress("/off");
             m.addIntArg(2);
-            sender.sendMessage(m);
+            two.sendMessage(m);
         }
         else if(msg.pitch == START_PITCH+2){
             ofxOscMessage m;
             m.setAddress("/off");
             m.addIntArg(3);
-            sender.sendMessage(m);
+            three.sendMessage(m);
         }
         else if(msg.pitch == START_PITCH+3){
             ofxOscMessage m;
             m.setAddress("/off");
             m.addIntArg(4);
-            sender.sendMessage(m);
+            four.sendMessage(m);
         }
     }
 }

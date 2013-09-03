@@ -5,8 +5,10 @@ void cloudPlayer::setup(){
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
     
-    bFading=false;
-    fadeSpeed=1500;
+    bFadingOut=false;
+    bFadingIn=false;
+    fadeOutSpeed=1500;
+    fadeInSpeed=500;
 
 	// Uncomment this to show movies with alpha channels
 	// cloudMovie.setPixelFormat(OF_PIXELS_RGBA);
@@ -18,6 +20,13 @@ void cloudPlayer::setup(){
 
 //--------------------------------------------------------------
 void cloudPlayer::update(){
+    if(bFadingOut==false&&cloudMovie.isPlaying()){
+//        cout<< cloudMovie.getDuration()<< " postion: "<<cloudMovie.getPosition()*cloudMovie.getDuration()<<endl;
+        if(cloudMovie.getDuration()*1000-cloudMovie.getPosition()*cloudMovie.getDuration()*1000<fadeOutSpeed){
+            cout<<"fade"<<endl;
+            fadeOut();
+        }
+    }
     while(receiver.hasWaitingMessages()){
 		// get the next message
 		ofxOscMessage m;
@@ -28,6 +37,7 @@ void cloudPlayer::update(){
                 if(!cloudMovie.isPlaying()){
                     cloudMovie.play();
                     cloudMovie.setLoopState(OF_LOOP_NONE);
+                    fadeIn();
                 }
             }
         }
@@ -35,7 +45,7 @@ void cloudPlayer::update(){
             if (m.getArgAsInt32(0)==SCREEN)
             {
                 if(cloudMovie.isPlaying()){
-                    fadeMovie();
+                    fadeOut();
                 }
             }
         }
@@ -52,17 +62,30 @@ void cloudPlayer::draw(){
 	ofSetHexColor(0xFFFFFF);
     
     if(cloudMovie.isPlaying()){
-        if(bFading==true){
-            if(ofGetElapsedTimeMillis()-fadeTimer<fadeSpeed){
-                float color=255-(255*((ofGetElapsedTimeMillis()-fadeTimer)/fadeSpeed));
-                cout<<((ofGetElapsedTimeMillis()-fadeTimer)/fadeSpeed)<<endl;
+        if(bFadingOut==true){
+            if(ofGetElapsedTimeMillis()-fadeOutTimer<fadeOutSpeed){
+                float color=255-(255*((ofGetElapsedTimeMillis()-fadeOutTimer)/fadeOutSpeed));
+//                cout<<((ofGetElapsedTimeMillis()-fadeOutTimer)/fadeOutSpeed)<<endl;
                 ofSetColor(color);
                 cloudMovie.draw(0,0);
             }
             else{
                 cloudMovie.stop();
                 cloudMovie.firstFrame();
-                bFading=false;
+                bFadingOut=false;
+            }
+        }
+        else if(bFadingIn==true){
+            if(ofGetElapsedTimeMillis()-fadeInTimer<fadeInSpeed){
+                float color=255*((ofGetElapsedTimeMillis()-fadeInTimer)/fadeInSpeed);
+//                cout<<((ofGetElapsedTimeMillis()-fadeInTimer)/fadeInSpeed)<<endl;
+                ofSetColor(color);
+                cloudMovie.draw(0,0);
+            }
+            else{
+                ofSetColor(255);
+                cloudMovie.draw(0,0);
+                bFadingIn=false;
             }
         }
         else{
@@ -75,10 +98,15 @@ void cloudPlayer::draw(){
 }
     
     //--------------------------------------------------------------
-    void cloudPlayer::fadeMovie(){
-        bFading=true;
-        fadeTimer=ofGetElapsedTimeMillis();
+    void cloudPlayer::fadeOut(){
+        bFadingOut=true;
+        fadeOutTimer=ofGetElapsedTimeMillis();
     }
+//--------------------------------------------------------------
+void cloudPlayer::fadeIn(){
+    bFadingIn=true;
+    fadeInTimer=ofGetElapsedTimeMillis();
+}
 
 //--------------------------------------------------------------
 void cloudPlayer::keyPressed  (int key){

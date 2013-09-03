@@ -4,7 +4,7 @@
 #include "ofxOsc.h"
 
 #define PORT 12345
-#define SCREEN 1
+#define SCREEN 3
 
 class cloudPlayer : public ofBaseApp{
 
@@ -24,13 +24,15 @@ class cloudPlayer : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-        void fadeMovie();
+    void fadeOut();
+    void fadeIn();
 
 		ofVideoPlayer 		cloudMovie;
         ofxOscReceiver receiver;
-    bool bFading;
-    float fadeTimer;
-    float fadeSpeed;
+    
+    bool bFadingOut, bFadingIn;
+    float fadeOutTimer, fadeInTimer;
+    float fadeOutSpeed, fadeInSpeed;
 
 };
 

@@ -26,8 +26,8 @@ class cloudSender : public ofBaseApp, public ofxMidiListener {
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		ofxOscSender sender;
-    string host;
+		ofxOscSender one,two,three,four;
+    string host [4];
     
     void newMidiMessage(ofxMidiMessage& eventArgs);
 	
