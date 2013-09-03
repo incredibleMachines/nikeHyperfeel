@@ -7,39 +7,14 @@
 //
 
 #include "SculptureTouch.h"
-#include "testApp.h"
+//#include "testApp.h"
 
 //--------------------------------------------------------------
 void SculptureTouch::setup(){
     int xOffset = 100;
     int yOffset = 0;
-    
-    //    //--- raw drawscript "ofShape" output:
-    //    ofFill();
-    //    ofSetColor(255,255,255);
-    //    ofBeginShape();
-    //    ofVertex(598,0);
-    //    ofVertex(231,0);
-    //    ofBezierVertex(231,0,186,123,310,127);
-    //    ofBezierVertex(360,129,443,104,492,142);
-    //    ofBezierVertex(536,177,646,141,598,0);
-    //    ofEndShape();
-    
-    // TODO: output drawscript as JSON,
-    //       build JSON parser and do this dynamically:
-    
-//    lines.clear();
-//    ofPolyline line;
-//    line.setClosed(true);
-//    line.addVertex(598+xOffset,0+yOffset);
-//    line.addVertex(231+xOffset,0+yOffset);
-//    line.bezierTo(231+xOffset,0+yOffset,186+xOffset,123+yOffset,310+xOffset,127+yOffset);
-//    line.bezierTo(360+xOffset,129+yOffset,443+xOffset,104+yOffset,492+xOffset,142+yOffset);
-//    line.bezierTo(536+xOffset,177+yOffset,646+xOffset,141+xOffset,598+xOffset,0+yOffset);
-//    line.simplify();
-//    lines.push_back(line);
-    
-    
+
+    //Create mask points
     lines.clear();
     ofPolyline line;
     line.setClosed(true);
@@ -64,7 +39,7 @@ void SculptureTouch::setup(){
 //--------------------------------------------------------------
 void SculptureTouch::update(){
     
-    pts = ((testApp *)ofGetAppPtr())->blobPoints; //update vector of all current points (blob positions)
+//    pts = ((testApp *)ofGetAppPtr())->blobPoints; //update vector of all current points (blob positions)
     cout<<"pts.size(): "<<pts.size()<<endl;
     
     for (int j=0; j<pts.size(); j++){

@@ -20,7 +20,6 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
     vector <ofVec2f> blobPoints;
-    
     SculptureTouch sculpture;
     
 };
