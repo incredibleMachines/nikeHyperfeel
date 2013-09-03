@@ -44,7 +44,7 @@ void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
     //update blobs positions in rings
     for (int i=0; i<rings.size(); i++) {
         rings[i].updateForces(_blobs);
-        rings[i].p2pForceStrength = 0.1  + ((lunarlon*) ofGetAppPtr())->TouchReactionAmt;
+        rings[i].p2pForceStrength = 0.1  + 0.5 * ((lunarlon*) ofGetAppPtr())->TouchReactionAmt;
         rings[i].touchAmt =  ((lunarlon*) ofGetAppPtr())->TouchReactionAmt;
         float osc = sin(ofGetElapsedTimef()) * breathing * i;
         rings[i].p2pForceRadius += osc;
