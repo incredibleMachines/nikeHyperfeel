@@ -9,7 +9,10 @@
 #include "ofxOpenCv.h"
 #include "ofxSyphon.h"
 #include "Camera.h"
+#include "ofxOsc.h"
 
+#define SEND_PORT 12345
+#define RECEIVE_PORT 12346
 
 class Blob {
 public:
@@ -34,6 +37,9 @@ class lunarlon : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+    
+    void sendTouch();
+    void receiveTouch();
     
 
     // Styling
@@ -99,7 +105,10 @@ class lunarlon : public ofBaseApp{
     //--- syphon
     ofTexture tex;
 	ofxSyphonServer mainOutputSyphonServer;
-	ofxSyphonServer individualTextureSyphonServer; 
+	ofxSyphonServer individualTextureSyphonServer;
+    
+    ofxOscSender touchSend;
+    ofxOscReceiver touchReceive;
 };
 
 

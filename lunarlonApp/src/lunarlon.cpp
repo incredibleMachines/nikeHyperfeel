@@ -5,6 +5,11 @@ void lunarlon::setup(){
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
+    
+    
+    	touchSend.setup("192.168.1.10", SEND_PORT);
+        touchReceive.setup( RECEIVE_PORT);
+    
     int nRings;
     int nParticlesringZero;
     
@@ -72,6 +77,18 @@ void lunarlon::setup(){
 
 //--------------------------------------------------------------
 void lunarlon::update(){
+    
+    while(touchReceive.hasWaitingMessages()){
+		// get the next message
+		ofxOscMessage m;
+		touchReceive.getNextMessage(&m);
+        if(m.getAddress()=="/touch"){
+            if (m.getArgAsInt32(0)==1)
+            {
+                bTouch=true;
+            }
+        }
+    }
     
     if (camera.update()){ //returns true if frame is new
             colorImg.setFromPixels(camera.getPixels(), camWidth, camHeight);
@@ -322,6 +339,7 @@ void lunarlon::keyPressed(int key){
     switch (key) {
         case 't':
             bTouch = !bTouch;
+            sendTouch();
             break;
             
         case 'r':
@@ -423,6 +441,21 @@ void lunarlon::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void lunarlon::dragEvent(ofDragInfo dragInfo){
+    
+}
+
+//--------------------------------------------------------------
+void lunarlon::sendTouch(){
+    ofxOscMessage m;
+    m.setAddress("/touch");
+    m.addIntArg(1);
+    touchSend.sendMessage(m);
+    
+}
+
+//--------------------------------------------------------------
+void lunarlon::receiveTouch(){
+    bTouch=!bTouch;
     
 }
 
