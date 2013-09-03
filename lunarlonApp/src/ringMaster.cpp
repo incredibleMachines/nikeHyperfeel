@@ -35,8 +35,8 @@ void RingMaster::setup(){
     
     for (int i=0; i<rings.size(); i++) {
         rings[i].setup(nParticlesRingZero*i, centerOfRings, initRadius * i, particleSpringiness, particleDist);
-        rings[i].p2pForceStrength = 0.9;
-        rings[i].p2pForceRadius = 10*i;
+        rings[i].p2pForceStrength = 0.4;
+        rings[i].p2pForceRadius = 11*i;
 
     }
     
@@ -65,12 +65,12 @@ void RingMaster::draw(){
     }
     
     //Draw blob points
-    for (int i=0; i<blobs.size(); i++) {
-        ofColor color;
-        color.setHsb(50, 255, 255);
-        ofSetColor(color);
-        ofCircle(blobs[i], 5);
-    }
+//    for (int i=0; i<blobs.size(); i++) {
+//        ofColor color;
+//        color.setHsb(50, 255, 255);
+//        ofSetColor(color);
+//        ofCircle(blobs[i], 5);
+//    }
     
     ofRect(centerOfRings.x,centerOfRings.y,10,10);
 
