@@ -12,6 +12,7 @@
 #include <iostream>
 #include "ofMain.h"
 #include "ring.h"
+#include "ofxSyphon.h"
 
 class RingMaster {
     
