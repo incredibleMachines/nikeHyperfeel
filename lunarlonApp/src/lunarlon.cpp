@@ -19,10 +19,9 @@ void lunarlon::setup(){
     //RingMaster
     ringmaster.setup();
     
-    //Touch
+    //--- touch & sculpture
     bTouch = false;
-    
-
+    sculpture.setup();
     
     //--- settings
     XML.loadFile("xml/settings.xml");
@@ -66,7 +65,7 @@ void lunarlon::setup(){
     //loadLatestBgCapture(); //pull last captured BG image from file!
     
     //--- staging, pagination
-    stageState = 1; //0=camera raw; 1=CV debug; 2=LIVE
+    stageState = 2; //0=camera raw; 1=CV debug; 2=LIVE
     
     //--- debuggin
     mouseAsBlob = true; //for debug purposes
@@ -77,6 +76,7 @@ void lunarlon::setup(){
 //--------------------------------------------------------------
 void lunarlon::update(){
     
+    //--- osc.update();
     while(touchReceive.hasWaitingMessages()){
 		// get the next message
 		ofxOscMessage m;
@@ -238,6 +238,7 @@ void lunarlon::update(){
     
     cout<<"blobPoints.size(): "<<blobPoints.size()<<endl;
     
+    //--- admin
     if(bDrawAdmin) {
         admin.update();
         camera.ps3eye.setBrightness(admin.gui.getValueF("CAM1:BRIGHTNESS"));
@@ -249,6 +250,9 @@ void lunarlon::update(){
         camera.ps3eye.setHue(admin.gui.getValueF("CAM1:HUE"));
         threshold=admin.gui.getValueF("CAM1:THRESH");
     }
+    
+    //--- sculpture
+    sculpture.update();
 }
 
 //--------------------------------------------------------------
@@ -311,7 +315,7 @@ void lunarlon::draw(){
     }
     
     
-    //--- draw rings, user animation ---
+    //------------------------ draw rings, user animation
     else if(stageState == 2){
         bg.draw(0,0,ofGetWidth(),ofGetHeight());
         
@@ -321,14 +325,17 @@ void lunarlon::draw(){
         }
         
         ringmaster.draw();
-
+        
+        //--- sculpture
+        sculpture.draw();
     }
     
-    ///SYPHON
+    //--- syphon
     tex.loadScreenData(0, 0, ofGetWidth(), ofGetHeight());
     individualTextureSyphonServer.publishTexture(&tex);
     ofSetColor(255);
     
+    //--- admin
     if(bDrawAdmin) admin.draw();
 }
 

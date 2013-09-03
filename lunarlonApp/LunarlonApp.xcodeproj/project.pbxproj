@@ -91,6 +91,7 @@
 		D3F8C89F16CBEADF00C36225 /* simpleColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3F8C88116CBEADF00C36225 /* simpleColor.cpp */; };
 		D3F8C8A016CBEADF00C36225 /* simpleFileLister.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3F8C88316CBEADF00C36225 /* simpleFileLister.cpp */; };
 		D3F8C8A116CBEADF00C36225 /* simpleLogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3F8C88516CBEADF00C36225 /* simpleLogger.cpp */; };
+		E22ABCDC17D650F200370101 /* SculptureTouch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E22ABCDA17D650F200370101 /* SculptureTouch.cpp */; };
 		E2A12C3717CBD57C00B71E9D /* ofxTextBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2A12C3417CBD57C00B71E9D /* ofxTextBlock.cpp */; };
 		E2DCC6B817D45CFA00756F4D /* AdminWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2DCC6A517D45CFA00756F4D /* AdminWindow.cpp */; };
 		E2DCC6B917D45CFA00756F4D /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2DCC6A717D45CFA00756F4D /* Camera.cpp */; };
@@ -421,6 +422,8 @@
 		D3F8C88416CBEADF00C36225 /* simpleFileLister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simpleFileLister.h; sourceTree = "<group>"; };
 		D3F8C88516CBEADF00C36225 /* simpleLogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simpleLogger.cpp; sourceTree = "<group>"; };
 		D3F8C88616CBEADF00C36225 /* simpleLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simpleLogger.h; sourceTree = "<group>"; };
+		E22ABCDA17D650F200370101 /* SculptureTouch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SculptureTouch.cpp; sourceTree = "<group>"; };
+		E22ABCDB17D650F200370101 /* SculptureTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SculptureTouch.h; sourceTree = "<group>"; };
 		E2A12C3217CBD57C00B71E9D /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		E2A12C3417CBD57C00B71E9D /* ofxTextBlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTextBlock.cpp; sourceTree = "<group>"; };
 		E2A12C3517CBD57C00B71E9D /* ofxTextBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTextBlock.h; sourceTree = "<group>"; };
@@ -1366,6 +1369,8 @@
 				E2DCC6A617D45CFA00756F4D /* AdminWindow.h */,
 				E2DCC6A717D45CFA00756F4D /* Camera.cpp */,
 				E2DCC6A817D45CFA00756F4D /* Camera.h */,
+				E22ABCDA17D650F200370101 /* SculptureTouch.cpp */,
+				E22ABCDB17D650F200370101 /* SculptureTouch.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1553,6 +1558,7 @@
 				E2DCC6BF17D45CFA00756F4D /* ringMaster.cpp in Sources */,
 				E2DCC6C017D45CFA00756F4D /* spring.cpp in Sources */,
 				E2DCC6C117D45CFA00756F4D /* user.cpp in Sources */,
+				E22ABCDC17D650F200370101 /* SculptureTouch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

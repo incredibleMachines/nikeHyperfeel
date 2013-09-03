@@ -10,8 +10,8 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
     
+    //--- make some fake blobs
     int nMouseBlobs = 1;
-    
     blobPoints.clear();
     for (int i=0; i<nMouseBlobs; i++){
         ofPoint mouse;
@@ -31,15 +31,20 @@ void testApp::update(){
         blobPoints.push_back(mouse);
     }
     
+    //--- update
     sculpture.update();
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-
+    
     ofBackground(10, 10, 10);
+    
+    //--- draw sculpture
     sculpture.draw();
     
+    
+    //--- draw blobs
     for (int i=0; i<blobPoints.size(); i++){
         ofFill();
         ofSetColor(255, 255, 255);

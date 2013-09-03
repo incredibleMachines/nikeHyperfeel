@@ -10,6 +10,7 @@
 #include "ofxSyphon.h"
 #include "Camera.h"
 #include "ofxOsc.h"
+#include "SculptureTouch.h"
 
 #define SEND_PORT 12345
 #define RECEIVE_PORT 12346
@@ -39,7 +40,8 @@ class lunarlon : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
 
-    void sendTouch(), sendOff();
+    void sendTouch();
+    void sendOff();
     void receiveTouch();
     
 
@@ -106,12 +108,14 @@ class lunarlon : public ofBaseApp{
     //--- syphon
     ofTexture tex;
 	ofxSyphonServer mainOutputSyphonServer;
-
 	ofxSyphonServer individualTextureSyphonServer;
     
+    //--- OSC
     ofxOscSender touchSend;
     ofxOscReceiver touchReceive;
-
+    
+    //--- sculpture detection
+    SculptureTouch sculpture;
 
 };
 
