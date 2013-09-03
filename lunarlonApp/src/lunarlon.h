@@ -105,10 +105,14 @@ class lunarlon : public ofBaseApp{
     //--- syphon
     ofTexture tex;
 	ofxSyphonServer mainOutputSyphonServer;
+<<<<<<< HEAD
 	ofxSyphonServer individualTextureSyphonServer;
     
     ofxOscSender touchSend;
     ofxOscReceiver touchReceive;
+=======
+	ofxSyphonServer individualTextureSyphonServer; 
+>>>>>>> faa94dced1501efa1f536e32c5d4b80e7d06fad2
 };
 
 
