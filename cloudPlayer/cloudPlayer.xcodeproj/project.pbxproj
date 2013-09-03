@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		D3B3183317D67C9C00EE9579 /* tinyxml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3B3182C17D67C9C00EE9579 /* tinyxml.cpp */; };
+		D3B3183417D67C9C00EE9579 /* tinyxmlerror.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3B3182E17D67C9C00EE9579 /* tinyxmlerror.cpp */; };
+		D3B3183517D67C9C00EE9579 /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3B3182F17D67C9C00EE9579 /* tinyxmlparser.cpp */; };
+		D3B3183617D67C9C00EE9579 /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3B3183117D67C9C00EE9579 /* ofxXmlSettings.cpp */; };
 		D3DD53DF17C93B6800F5BB44 /* IpEndpointName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3DD53B917C93B6800F5BB44 /* IpEndpointName.cpp */; };
 		D3DD53E017C93B6800F5BB44 /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3DD53BE17C93B6800F5BB44 /* NetworkingUtils.cpp */; };
 		D3DD53E117C93B6800F5BB44 /* UdpSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3DD53BF17C93B6800F5BB44 /* UdpSocket.cpp */; };
@@ -78,6 +82,13 @@
 		D33519EF17C8155300C471B7 /* 4.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 4.mov; sourceTree = "<group>"; };
 		D33519F317C815C400C471B7 /* 3.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 3.mov; sourceTree = "<group>"; };
 		D33519F417C815C400C471B7 /* 2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = 2.mov; sourceTree = "<group>"; };
+		D3B3182C17D67C9C00EE9579 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
+		D3B3182D17D67C9C00EE9579 /* tinyxml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyxml.h; sourceTree = "<group>"; };
+		D3B3182E17D67C9C00EE9579 /* tinyxmlerror.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlerror.cpp; sourceTree = "<group>"; };
+		D3B3182F17D67C9C00EE9579 /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
+		D3B3183117D67C9C00EE9579 /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
+		D3B3183217D67C9C00EE9579 /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
+		D3B3183917D67DEE00EE9579 /* mySettings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = mySettings.xml; path = bin/data/mySettings.xml; sourceTree = "<group>"; };
 		D3DD53B917C93B6800F5BB44 /* IpEndpointName.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IpEndpointName.cpp; sourceTree = "<group>"; };
 		D3DD53BA17C93B6800F5BB44 /* IpEndpointName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IpEndpointName.h; sourceTree = "<group>"; };
 		D3DD53BB17C93B6800F5BB44 /* NetworkingUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkingUtils.h; sourceTree = "<group>"; };
@@ -169,6 +180,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				D3B3182A17D67C9C00EE9579 /* ofxXmlSettings */,
 				D3DD53B417C93B6800F5BB44 /* ofxOsc */,
 			);
 			name = addons;
@@ -214,6 +226,35 @@
 			);
 			name = movies;
 			path = bin/data/movies;
+			sourceTree = "<group>";
+		};
+		D3B3182A17D67C9C00EE9579 /* ofxXmlSettings */ = {
+			isa = PBXGroup;
+			children = (
+				D3B3182B17D67C9C00EE9579 /* libs */,
+				D3B3183017D67C9C00EE9579 /* src */,
+			);
+			path = ofxXmlSettings;
+			sourceTree = "<group>";
+		};
+		D3B3182B17D67C9C00EE9579 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				D3B3182C17D67C9C00EE9579 /* tinyxml.cpp */,
+				D3B3182D17D67C9C00EE9579 /* tinyxml.h */,
+				D3B3182E17D67C9C00EE9579 /* tinyxmlerror.cpp */,
+				D3B3182F17D67C9C00EE9579 /* tinyxmlparser.cpp */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
+		D3B3183017D67C9C00EE9579 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D3B3183117D67C9C00EE9579 /* ofxXmlSettings.cpp */,
+				D3B3183217D67C9C00EE9579 /* ofxXmlSettings.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		D3DD53B417C93B6800F5BB44 /* ofxOsc */ = {
@@ -350,6 +391,7 @@
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,
 				E4B69B5B0A3A1756003C02F2 /* cloudPlayerDebug.app */,
+				D3B3183917D67DEE00EE9579 /* mySettings.xml */,
 			);
 			sourceTree = "<group>";
 		};
@@ -475,6 +517,10 @@
 				D3DD53EA17C93B6800F5BB44 /* ofxOscParameterSync.cpp in Sources */,
 				D3DD53EB17C93B6800F5BB44 /* ofxOscReceiver.cpp in Sources */,
 				D3DD53EC17C93B6800F5BB44 /* ofxOscSender.cpp in Sources */,
+				D3B3183317D67C9C00EE9579 /* tinyxml.cpp in Sources */,
+				D3B3183417D67C9C00EE9579 /* tinyxmlerror.cpp in Sources */,
+				D3B3183517D67C9C00EE9579 /* tinyxmlparser.cpp in Sources */,
+				D3B3183617D67C9C00EE9579 /* ofxXmlSettings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
