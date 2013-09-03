@@ -2,6 +2,18 @@
 
 //--------------------------------------------------------------
 void cloudPlayer::setup(){
+    
+    
+    if( settings.loadFile("mySettings.xml") ){
+		message = "mySettings.xml loaded!";
+	}else{
+		message = "unable to load mySettings.xml check data/ folder";
+	}
+    
+    gradientCenter=settings.getValue("CENTER",ofGetWidth()/2);
+    gradientWidth=settings.getValue("WIDTH",100);
+    gradientFadeWidth=settings.getValue("FASE",25);
+    
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
     
@@ -16,6 +28,11 @@ void cloudPlayer::setup(){
     receiver.setup(PORT);
 
 	cloudMovie.loadMovie("movies/"+ofToString(SCREEN)+".mov");
+    
+    bMask=settings.getValue("MASK",1);
+    bWhite=false;
+    cout<<message<<endl;
+
 }
 
 //--------------------------------------------------------------
@@ -58,6 +75,8 @@ void cloudPlayer::update(){
 
 //--------------------------------------------------------------
 void cloudPlayer::draw(){
+    
+    ofBackground(0,0,0);
 
 	ofSetHexColor(0xFFFFFF);
     
@@ -94,6 +113,31 @@ void cloudPlayer::draw(){
     
         
     }
+    
+    if(bWhite==true){
+        ofBackground(255,255,255);
+    }
+    
+    if(bMask==true){
+        int startPixel=gradientCenter-gradientWidth/2;
+        for(int i=0;i<gradientWidth;i++){
+            if(i<gradientFadeWidth){
+                int opacity=ofMap(i,0,gradientFadeWidth,0,255);
+                ofSetColor(0,0,0,opacity);
+                ofLine(startPixel+i,0,startPixel+i,ofGetHeight());
+            }
+            else if(i>gradientWidth-gradientFadeWidth){
+                int opacity=ofMap(i,gradientWidth-gradientFadeWidth,gradientWidth,255,0);
+                ofSetColor(0,0,0,opacity);
+                ofLine(startPixel+i,0,startPixel+i,ofGetHeight());
+            }
+            else{
+                ofSetColor(0,0,0,255);
+                ofLine(startPixel+i,0,startPixel+i,ofGetHeight());
+            }
+
+        }
+    }
 
 }
     
@@ -111,7 +155,43 @@ void cloudPlayer::fadeIn(){
 //--------------------------------------------------------------
 void cloudPlayer::keyPressed  (int key){
     switch(key){
-
+        case 'm':
+            bMask=!bMask;
+            break;
+        case 'M':
+            bMask=true;
+            bWhite=!bWhite;
+            break;
+        case OF_KEY_RIGHT:
+            gradientCenter++;
+            break;
+        case OF_KEY_UP:
+            gradientCenter+=10;
+            break;
+        case OF_KEY_LEFT:
+            gradientCenter--;
+            break;
+        case OF_KEY_DOWN:
+            gradientCenter-=10;
+            break;
+        case '=':
+            gradientWidth++;
+            break;
+        case ']':
+            gradientFadeWidth++;
+            break;
+        case '-':
+            gradientWidth--;
+            break;
+        case '[':
+            gradientFadeWidth--;
+            break;
+        case ' ':
+            settings.setValue("WIDTH",gradientWidth);
+            settings.setValue("CENTER",gradientCenter);
+            settings.setValue("FADE", gradientFadeWidth);
+            settings.setValue("MASK",bMask);
+            settings.save("mySettings.xml");
     }
 }
 

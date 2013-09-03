@@ -2,9 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
+#include "ofxXmlSettings.h"
 
 #define PORT 12345
-#define SCREEN 3
+#define SCREEN 4
 
 class cloudPlayer : public ofBaseApp{
 
@@ -33,6 +34,15 @@ class cloudPlayer : public ofBaseApp{
     bool bFadingOut, bFadingIn;
     float fadeOutTimer, fadeInTimer;
     float fadeOutSpeed, fadeInSpeed;
+    
+    bool bMask, bWhite;
+    
+    int gradientCenter;
+    int gradientWidth;
+    int gradientFadeWidth;
+    
+    ofxXmlSettings settings;
+    		string message;
 
 };
 
