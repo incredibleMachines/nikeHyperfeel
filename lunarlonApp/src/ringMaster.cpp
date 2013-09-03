@@ -22,11 +22,11 @@ void RingMaster::setup(){
     bStartCount = false;
     
     //Rings
-    nRings = 35;
+    nRings = 40;
     int nParticlesRingZero = 4;
     particleDist = 1;
-    particleSpringiness = 0.7;
-    float initRadius = 10;
+    particleSpringiness = 0.4;
+    float initRadius = 20;
     
     for (int i=0; i<nRings; i++) {
         Ring tempRing;
@@ -35,10 +35,11 @@ void RingMaster::setup(){
     
     for (int i=0; i<rings.size(); i++) {
         rings[i].setup(nParticlesRingZero*i, centerOfRings, initRadius * i, particleSpringiness, particleDist);
-        rings[i].p2pForceStrength = 0.1;
+        rings[i].p2pForceStrength = 0.5;
         rings[i].p2pForceRadius = 10*i;
 
     }
+    
 }
 
 //--------------------------------------------------------------
@@ -70,6 +71,9 @@ void RingMaster::draw(){
         ofSetColor(color);
         ofCircle(blobs[i], 5);
     }
+    
+    ofRect(centerOfRings.x,centerOfRings.y,10,10);
+
 }
 
 //--------------------------------------------------------------

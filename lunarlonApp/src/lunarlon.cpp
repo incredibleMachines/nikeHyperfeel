@@ -18,8 +18,7 @@ void lunarlon::setup(){
     //Touch
     bTouch = false;
     
-    //--- syphon
-    tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
+
     
     //--- settings
     XML.loadFile("xml/settings.xml");
@@ -29,10 +28,10 @@ void lunarlon::setup(){
     camWidth = 320;//640;
     camHeight = 240;//480;
     
-    camZoom.x=1000;
-    camZoom.y=600;
-    camOffset.x=-375;
-    camOffset.y=-150 ;
+    camZoom.x=850;
+    camZoom.y=400;
+    camOffset.x=-450;
+    camOffset.y=100 ;
     
     camera.setup(camWidth, camHeight);  //-- ofxPs3Eye
     camera.ps3eye.setBrightness(admin.gui.getValueF("CAM1:BRIGHTNESS"));
@@ -54,14 +53,10 @@ void lunarlon::setup(){
     
     stageWidth = ofGetWidth()+camZoom.x;//960;
     stageHeight = ofGetHeight()+camZoom.y;//960;
-    
-    colorImgStage.allocate(stageWidth,stageHeight);
-	grayImageStage.allocate(stageWidth,stageHeight);
-	grayBgStage.allocate(stageWidth,stageHeight);
-	grayDiffStage.allocate(stageWidth,stageHeight);
+
     
 	bLearnBakground = false;
-    blobDist = 100; //distance in pixels under which blobs will be combined/ignored
+    blobDist = 10; //distance in pixels under which blobs will be combined/ignored
     
     
     //loadLatestBgCapture(); //pull last captured BG image from file!
@@ -72,27 +67,17 @@ void lunarlon::setup(){
     //--- debuggin
     mouseAsBlob = true; //for debug purposes
     nMouseBlobs = 3; //supports up to 4 only!
+    tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
 }
 
 //--------------------------------------------------------------
 void lunarlon::update(){
     
     if (camera.update()){ //returns true if frame is new
-        
-        if(stageState == 1){
             colorImg.setFromPixels(camera.getPixels(), camWidth, camHeight);
-            
             grayImage = colorImg;
             if (bLearnBakground == true){
                 grayBg = grayImage;		// the = sign copys the pixels from grayImage into grayBg (operator overloading)
-                
-                colorImgStage=colorImg;
-                colorImgStage.resize(stageWidth, stageHeight);
-                grayImageStage.resize(colorImgStage.width, colorImgStage.height);
-                grayImageStage = colorImgStage;
-                grayBgStage.resize(grayImageStage.width, grayImageStage.height);
-                grayBgStage = grayImageStage;
-                
                 /*** save this new bg image to file! ***/
                 ofImage backgroundImg;
                 backgroundImg.setFromPixels(camera.getPixels(), camWidth, camHeight, OF_IMAGE_COLOR);
@@ -112,48 +97,28 @@ void lunarlon::update(){
             // find contours which are between the size of 20 pixels and 1/3 the w*h pixels.
             // also, find holes is set to true so we will get interior contours as well....
             contourFinder.findContours(grayDiff, 20, (camWidth*camHeight)/3, 10, true);	// find holes
-        }
-        
-        else if (stageState == 2||stageState==0){
-            colorImgStage.setFromPixels(camera.getPixels(), camWidth, camHeight);
-            colorImgStage.resize(stageWidth, stageHeight);
-            
-            grayImageStage.resize(colorImgStage.width, colorImgStage.height);
-            grayImageStage = colorImgStage;
-            
-            // take the abs value of the difference between background and incoming and then threshold:
-            grayDiffStage.resize(grayImageStage.width, grayImageStage.height);
-            grayDiffStage.absDiff(grayBgStage, grayImageStage);
-            grayDiffStage.threshold(threshold);
-            
-            contourFinderStage.findContours(grayDiffStage, 20, (stageWidth*stageHeight)/3, 10, true);	// find holes
-        }
-	}
+}
     
     blobs.clear();
     blobPoints.clear();
     
-    for (int i = 0; i < contourFinderStage.nBlobs; i++){ //for every blob
-        float distFromCenter = ofDist(contourFinderStage.blobs[i].centroid.x+stagingX,
-                                      contourFinderStage.blobs[i].centroid.y+stagingY, stageCenterX, stageCenterY);
+    for (int i = 0; i < contourFinder.nBlobs; i++){ //for every blob
+        float distFromCenter = ofDist(contourFinder.blobs[i].centroid.x,
+                                      contourFinder.blobs[i].centroid.y, camWidth/2, camHeight/2);
         ofPoint blobClosest;
-        //cout<<"BLOB # " << i << " distFromCenter: "<< distFromCenter << endl; //---> sanity check
-        //            cout<<"BLOB # " << i << " ZONE # "<< j << endl;
-        //            Player thisPlayer;
-        //            thisPlayer.setPlayer(i, j, 0);
-        //            players.push_back(thisPlayer);
+
         
-        contourFinderStage.blobs[i].draw( stagingX, stagingY ); //draw this blob on the stage
+//        contourFinder.blobs[i].draw( stagingX, stagingY ); //draw this blob on the stage
         
         bool bNewBlob=true;
         
         for(int j=0; j<blobs.size();j++){
-            if (ofDist(contourFinderStage.blobs[i].centroid.x,
-                       contourFinderStage.blobs[i].centroid.y, blobs[j].blob.centroid.x, blobs[j].blob.centroid.y)<blobDist)
+            if (ofDist(contourFinder.blobs[i].centroid.x,
+                       contourFinder.blobs[i].centroid.y, blobs[j].blob.centroid.x, blobs[j].blob.centroid.y)<blobDist)
             {
                 bNewBlob=false;
                 if(distFromCenter<blobs[j].centroidDist){
-                    blobs[j].blob=contourFinderStage.blobs[i];
+                    blobs[j].blob=contourFinder.blobs[i];
                     blobs[j].centroidDist=distFromCenter;
                     float blobCenterDist;
                     for(int k=0;k<blobs[j].blob.nPts;k++){
@@ -169,7 +134,6 @@ void lunarlon::update(){
                             blobCenterDist=currentCenterDist;
                             blobClosest.x=blobs[j].blob.pts[k].x+stagingX;
                             blobClosest.y=blobs[j].blob.pts[k].y+stagingY;
-                            
                         }
                     }
                     blobs[j].closest=blobClosest;
@@ -179,22 +143,22 @@ void lunarlon::update(){
         
         if(bNewBlob==true){
             Blob tempBlob;
-            tempBlob.blob=contourFinderStage.blobs[i];
+            tempBlob.blob=contourFinder.blobs[i];
             tempBlob.centroidDist=distFromCenter;
             float blobCenterDist;
             for(int k=0;k<tempBlob.blob.nPts;k++){
                 if(k==0){
-                    blobCenterDist=ofDist(tempBlob.blob.pts[k].x+stagingX,
-                                          tempBlob.blob.pts[k].y+stagingY, stageCenterX, stageCenterY);
+                    blobCenterDist=ofDist(tempBlob.blob.pts[k].x,
+                                          tempBlob.blob.pts[k].y,camWidth/2, camHeight/2);
                     blobClosest.x=tempBlob.blob.pts[k].x+stagingX;
                     blobClosest.y=tempBlob.blob.pts[k].y+stagingY;
                 }
-                float currentCenterDist=ofDist(tempBlob.blob.pts[k].x+stagingX,
-                                               tempBlob.blob.pts[k].y+stagingY, stageCenterX, stageCenterY);
+                float currentCenterDist=ofDist(tempBlob.blob.pts[k].x,
+                                               tempBlob.blob.pts[k].y,camWidth/2, camHeight/2);
                 if(currentCenterDist<blobCenterDist){
                     blobCenterDist=currentCenterDist;
-                    blobClosest.x=tempBlob.blob.pts[k].x+stagingX;
-                    blobClosest.y=tempBlob.blob.pts[k].y+stagingY;
+                    blobClosest.x=tempBlob.blob.pts[k].x;
+                    blobClosest.y=tempBlob.blob.pts[k].y;
                     
                 }
             }
@@ -203,13 +167,13 @@ void lunarlon::update(){
         }
         
         
-        int blue = ofMap(distFromCenter, 50, stageWidth/2, 0, 255);
-        int red =ofMap(distFromCenter, 50, stageWidth/2, 255, 0);
-        ofSetColor(red,0,blue);
-        ofFill();
-        ofEllipse(contourFinderStage.blobs[i].centroid.x + stagingX, contourFinderStage.blobs[i].centroid.y + stagingY, 50, 50); //draw ID circles
-        ofSetColor(255);
-        ofDrawBitmapString(ofToString(i), contourFinderStage.blobs[i].centroid.x+ stagingX, contourFinderStage.blobs[i].centroid.y + stagingY); //draw ID number
+//        int blue = ofMap(distFromCenter, 50, stageWidth/2, 0, 255);
+//        int red =ofMap(distFromCenter, 50, stageWidth/2, 255, 0);
+//        ofSetColor(red,0,blue);
+//        ofFill();
+//        ofEllipse(contourFinder.blobs[i].centroid.x + stagingX, contourFinder.blobs[i].centroid.y + stagingY, 50, 50); //draw ID circles
+//        ofSetColor(255);
+//        ofDrawBitmapString(ofToString(i), contourFinder.blobs[i].centroid.x, contourFinder.blobs[i].centroid.y + stagingY); //draw ID number
     }
     
     //--- debuggin
@@ -235,10 +199,12 @@ void lunarlon::update(){
     }
     //-------- let's do this
     else { 
-        //blobPoints.clear();
         for(int j=0; j<blobs.size();j++){
             ofVec2f thisBlob;
-            thisBlob.set(blobs[j].closest.x,blobs[j].closest.y);
+            thisBlob.x=ofMap(blobs[j].closest.x,0,camWidth,0,stageWidth);
+            thisBlob.x+=stagingX;
+            thisBlob.y=ofMap(blobs[j].closest.y,0,camHeight,0,stageHeight);
+            thisBlob.y+=stagingY;
             blobPoints.push_back(thisBlob);
         }
     }
@@ -279,6 +245,7 @@ void lunarlon::draw(){
     if (stageState == 0){
         camera.draw(stagingX, stagingY, stageWidth, stageHeight);
         for(int j=0;j<blobPoints.size();j++){
+
             blobs[j].blob.draw();
             ofFill();
             ofSetColor(255,0,0);
@@ -330,7 +297,7 @@ void lunarlon::draw(){
     
     //--- draw rings, user animation ---
     else if(stageState == 2){
-        bg.draw(0,0);
+        bg.draw(0,0,ofGetWidth(),ofGetHeight());
         
         //Draw user graphics
         for(int i=0; i<blobPoints.size();i++){
@@ -338,7 +305,13 @@ void lunarlon::draw(){
         }
         
         ringmaster.draw();
+
     }
+    
+    ///SYPHON
+    tex.loadScreenData(0, 0, ofGetWidth(), ofGetHeight());
+    individualTextureSyphonServer.publishTexture(&tex);
+    ofSetColor(255);
     
     if(bDrawAdmin) admin.draw();
 }

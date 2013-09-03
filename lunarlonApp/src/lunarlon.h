@@ -52,10 +52,7 @@ class lunarlon : public ofBaseApp{
     //--- stage state - what page are we looking at
     int stageState;
     
-    //--- syphon
-    ofTexture tex;
-	ofxSyphonServer mainOutputSyphonServer;
-	ofxSyphonServer individualTextureSyphonServer;
+
     
     //--- debug
     bool mouseAsBlob;
@@ -98,6 +95,11 @@ class lunarlon : public ofBaseApp{
     
     vector<Blob> blobs;
     int blobDist;
+    
+    //--- syphon
+    ofTexture tex;
+	ofxSyphonServer mainOutputSyphonServer;
+	ofxSyphonServer individualTextureSyphonServer; 
 };
 
 
