@@ -22,7 +22,7 @@ void RingMaster::setup(){
     bStartCount = false;
     
     //Rings
-    nRings = 40;
+    nRings = 50;
     int nParticlesRingZero = 2;
     particleDist = 1;
     particleSpringiness = 0.4;
@@ -36,7 +36,7 @@ void RingMaster::setup(){
     for (int i=0; i<rings.size(); i++) {
         rings[i].setup(nParticlesRingZero*i, centerOfRings, initRadius * i, particleSpringiness, particleDist);
         rings[i].p2pForceStrength = 0.4;
-        rings[i].p2pForceRadius = 11*i;
+        rings[i].p2pForceRadius = 9*i;
 
     }
     
