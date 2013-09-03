@@ -30,7 +30,7 @@ void lunarlon::setup(){
     
     camZoom.x=850;
     camZoom.y=400;
-    camOffset.x=-450;
+    camOffset.x=-350;
     camOffset.y=100 ;
     
     camera.setup(camWidth, camHeight);  //-- ofxPs3Eye
