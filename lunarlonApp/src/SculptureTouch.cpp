@@ -34,17 +34,14 @@ void SculptureTouch::setup(){
     
     lines.clear();
     ofPolyline line;
-    line.setClosed(true);
-    line.addVertex(426,417);
-    line.addVertex(653,417);
-    line.addVertex(653,358);
+    line.setClosed(true);   
+    
     line.addVertex(632,189);
-    line.addVertex(693,114);
-    line.addVertex(693,35);
-    line.addVertex(386,35);
-    line.addVertex(386,104);
+    line.addVertex(538,226);
     line.addVertex(444,189);
-    line.addVertex(426,352);
+    line.addVertex(444,0);
+    line.addVertex(632,0);
+    
     line.simplify();
     lines.push_back(line);
     

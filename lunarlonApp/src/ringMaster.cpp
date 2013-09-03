@@ -14,19 +14,14 @@ void RingMaster::setup(){
     // Main Center Position
     centerOfRings.set(ofGetWidth()/2, 50);
     
-    //Touch Controls
-//    bTouch = false;
-//    counter = 0;
-//    touchReactionSpeed = 0.0005;
-//    bTimerReached = false;
-//    bStartCount = false;
     
-    //Rings
-    nRings = 50;
+    // Rings init values
+    nRings = 49;
     int nParticlesRingZero = 2;
     particleDist = 1;
     particleSpringiness = 0.4;
     float initRadius = 10;
+    breathing = 0.03;
     
     for (int i=0; i<nRings; i++) {
         Ring tempRing;
@@ -37,7 +32,6 @@ void RingMaster::setup(){
         rings[i].setup(nParticlesRingZero*i, centerOfRings, initRadius * i, particleSpringiness, particleDist);
         rings[i].p2pForceStrength = 0.4;
         rings[i].p2pForceRadius = 9*i;
-
     }
     
 }
@@ -50,8 +44,10 @@ void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
     //update blobs positions in rings
     for (int i=0; i<rings.size(); i++) {
         rings[i].updateForces(_blobs);
-        rings[i].p2pForceStrength = 0.1  + ((lunarlon*) ofGetAppPtr())->TouchReactionAmt*1.5;
+        rings[i].p2pForceStrength = 0.1  + ((lunarlon*) ofGetAppPtr())->TouchReactionAmt;
         rings[i].touchAmt =  ((lunarlon*) ofGetAppPtr())->TouchReactionAmt;
+        float osc = sin(ofGetElapsedTimef()) * breathing * i;
+        rings[i].p2pForceRadius += osc;
     }
 }
 

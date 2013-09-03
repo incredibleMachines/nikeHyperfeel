@@ -25,7 +25,7 @@ void lunarlon::setup(){
     
     //--- touch animation
     counter = 0;
-    touchReactionSpeed = 0.005;
+    touchReactionSpeed = 0.05;
     TouchReactionAmt = 0;
     bTimerReached = false;
     bStartCount = false;
@@ -337,11 +337,11 @@ void lunarlon::draw(){
         
         ringmaster.draw();
         
-        //--- sculpture
-        sculpture.draw();
-        
-        // report touch animation amount
-        ofDrawBitmapString(ofToString(TouchReactionAmt), 100,200);
+//        //--- sculpture
+//        sculpture.draw();
+//        
+//        // report touch animation amount
+//        ofDrawBitmapString(ofToString(TouchReactionAmt), 100,200);
     }
     
     //--- syphon
@@ -506,7 +506,7 @@ float lunarlon::animateTouch(){
         counter+=touchReactionSpeed;
     }
     
-    if (counter>=1) {
+    if (counter>=0.9) {
         bTimerReached = true;
     }
     

@@ -22,8 +22,6 @@ public:
     void update(vector<ofVec2f>_blobs, bool _bTouch);
     void draw();
     
-    float touch(); //touch reaction triggering function
-    
     // Rings
     vector<Ring>rings;
     ofVec2f centerOfRings;
@@ -33,16 +31,12 @@ public:
     float particleDist;
     float particleSpringiness;
     
-    // Touch Controls
-//    bool bTouch;
+    // Blob positions
     vector<ofVec2f>blobs;
-//    float startTime;
-//    float endTime;
-//    bool bTimerReached;
-//    float counter;
-//    bool bStartCount;
-//    float touchReactionSpeed;
     
+    // Animation
+    float breathing;
+
 };
 
 #endif /* defined(__lunarlon__ringMaster__) */

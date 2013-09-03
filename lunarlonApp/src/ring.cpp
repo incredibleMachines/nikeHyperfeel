@@ -89,7 +89,7 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
     for (int i=0; i<springs.size(); i++) {
         springs[i].update();
         ofColor tempColor;
-        tempColor.setHsb(78 - 0.3*i - 30*touchAmt, 255, 255,200);
+        tempColor.setHsb(78 - 0.3*i - 40*touchAmt, 255, 255,200);
 
         springs[i].color = tempColor;
     }
