@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
+#include "SculptureTouch.h"
 
 
 #define SEND_PORT 12346
@@ -42,7 +43,10 @@ class lunarlonStatue : public ofBaseApp {
     float counter;
     bool bTimerReached;
     float touchReactionSpeed;
-
+  
+    //Touch Mask
+    SculptureTouch sculpture;
+    vector <ofVec2f> blobPoints;
 
 };
 

@@ -17,6 +17,9 @@ void lunarlonStatue::setup(){
     touchReactionSpeed = 0.005;
     bTimerReached = false;
     bStartCount = false;
+    
+    //Mask
+    sculpture.setup();
 
     
 }
@@ -40,6 +43,8 @@ void lunarlonStatue::update(){
             }
         }
     }
+    
+    sculpture.update();
 }
 
 //--------------------------------------------------------------
@@ -57,6 +62,8 @@ void lunarlonStatue::draw(){
 	ofDrawBitmapString(buf, 10, 20);
     buf = "receiving osc message" + message+" from "+ string("192.168.1.10") + ofToString(RECEIVE_PORT);
 	ofDrawBitmapString(buf, 10, 40);
+    
+    sculpture.draw();
 }
 
 //--------------------------------------------------------------

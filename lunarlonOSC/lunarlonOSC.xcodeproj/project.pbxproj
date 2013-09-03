@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0BDCD3C117D6514B009FD4A4 /* SculptureTouch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0BDCD3BF17D6514B009FD4A4 /* SculptureTouch.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		D3F131E717D4CEA0000CEF4D /* IpEndpointName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3F131C317D4CEA0000CEF4D /* IpEndpointName.cpp */; };
 		D3F131E817D4CEA0000CEF4D /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3F131C817D4CEA0000CEF4D /* NetworkingUtils.cpp */; };
@@ -73,6 +74,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0BDCD3BF17D6514B009FD4A4 /* SculptureTouch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SculptureTouch.cpp; sourceTree = "<group>"; };
+		0BDCD3C017D6514B009FD4A4 /* SculptureTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SculptureTouch.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		D3F131BE17D4CEA0000CEF4D /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		D3F131C317D4CEA0000CEF4D /* IpEndpointName.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IpEndpointName.cpp; sourceTree = "<group>"; };
@@ -335,9 +338,11 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* lunarlonStatue.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* lunarlonStatue.h */,
+				0BDCD3BF17D6514B009FD4A4 /* SculptureTouch.cpp */,
+				0BDCD3C017D6514B009FD4A4 /* SculptureTouch.h */,
+				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -453,6 +458,7 @@
 				D3F131F117D4CEA0000CEF4D /* ofxOscMessage.cpp in Sources */,
 				D3F131F217D4CEA0000CEF4D /* ofxOscReceiver.cpp in Sources */,
 				D3F131F317D4CEA0000CEF4D /* ofxOscSender.cpp in Sources */,
+				0BDCD3C117D6514B009FD4A4 /* SculptureTouch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
