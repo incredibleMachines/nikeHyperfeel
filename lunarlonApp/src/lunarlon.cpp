@@ -510,7 +510,7 @@ float lunarlon::animateTouch(){
         bTimerReached = true;
     }
     
-    if(bStartCount && bTimerReached){
+    if(!bTouch && bTimerReached){
         counter-=touchReactionSpeed;
         if (counter<=0.1) {
             bStartCount = false;
