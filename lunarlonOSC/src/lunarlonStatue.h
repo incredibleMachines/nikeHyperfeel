@@ -29,12 +29,20 @@ class lunarlonStatue : public ofBaseApp {
     void sendTouch();
     void sendOff();
 
-		ofxOscSender sender;
+    ofxOscSender sender;
     ofxOscReceiver receiver;
     
     string message;
     
     bool bTouched;
+    
+    //Touch controls & animation
+    float touch(); //touch reaction triggering function
+    bool bStartCount;
+    float counter;
+    bool bTimerReached;
+    float touchReactionSpeed;
+
 
 };
 

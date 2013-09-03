@@ -6,10 +6,19 @@ void lunarlonStatue::setup(){
 	ofBackground(40, 100, 40);
 
 	// open an outgoing connection to HOST:PORT
-	sender.setup("192.168.1.10", SEND_PORT);
+	sender.setup("192.168.0.55", SEND_PORT);
     receiver.setup(RECEIVE_PORT);
     bTouched=false;
     ofBackground(255);
+    
+    //Touch Controls
+    bTouched = false;
+    counter = 0;
+    touchReactionSpeed = 0.005;
+    bTimerReached = false;
+    bStartCount = false;
+
+    
 }
 
 //--------------------------------------------------------------
@@ -28,27 +37,52 @@ void lunarlonStatue::update(){
             {
                 bTouched=false;
                 message="off";
-
             }
         }
     }
-
 }
 
 //--------------------------------------------------------------
 void lunarlonStatue::draw(){
+
+    ofSetWindowTitle(ofToString(ofGetFrameRate()));
+    
+    ofColor bgColor;
+    bgColor.setHsb(78, 100 + 155*touch(), 255*touch());
+    ofBackground(bgColor);
+
 	// display instructions
-    if(bTouched==true){
-        ofBackground(255);
-    }
-    else{
-        ofBackground(0);
-    }
 	string buf;
 	buf = "sending osc messages to " + string("192.168.1.10") + ofToString(SEND_PORT);
 	ofDrawBitmapString(buf, 10, 20);
     buf = "receiving osc message" + message+" from "+ string("192.168.1.10") + ofToString(RECEIVE_PORT);
 	ofDrawBitmapString(buf, 10, 40);
+}
+
+//--------------------------------------------------------------
+float lunarlonStatue::touch(){
+    
+    if (bTouched) {
+        bStartCount = true;
+    }
+    
+    if (bStartCount && !bTimerReached) {
+        counter+=touchReactionSpeed;
+    }
+    
+    if (counter>=1) {
+        bTimerReached = true;
+    }
+    
+    if(bStartCount && bTimerReached){
+        counter-=touchReactionSpeed;
+        if (counter<=0.1) {
+            bStartCount = false;
+            bTimerReached = false;
+            bTouched = false; // pointer to bTouch on lunarlon.cpp
+        }
+    }
+    return counter;
 }
 
 //--------------------------------------------------------------

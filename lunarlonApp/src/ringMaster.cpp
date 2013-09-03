@@ -17,13 +17,13 @@ void RingMaster::setup(){
     //Touch Controls
     bTouch = false;
     counter = 0;
-    touchReactionSpeed = 0.0001;
+    touchReactionSpeed = 0.0005;
     bTimerReached = false;
     bStartCount = false;
     
     //Rings
-    nRings = 38;
-    int nParticlesRingZero = 4;
+    nRings = 40;
+    int nParticlesRingZero = 2;
     particleDist = 1;
     particleSpringiness = 0.4;
     float initRadius = 10;
@@ -51,7 +51,7 @@ void RingMaster::update(vector<ofVec2f>_blobs, bool _bTouch){
     //update blobs positions in rings
     for (int i=0; i<rings.size(); i++) {
         rings[i].updateForces(_blobs);
-        rings[i].p2pForceStrength = 0.1  + touch()*0.7;
+        rings[i].p2pForceStrength = 0.1  + touch()*1.5;
         rings[i].touchAmt =  touch();
     }
 }
@@ -65,14 +65,14 @@ void RingMaster::draw(){
     }
     
     //Draw blob points
-//    for (int i=0; i<blobs.size(); i++) {
-//        ofColor color;
-//        color.setHsb(50, 255, 255);
-//        ofSetColor(color);
-//        ofCircle(blobs[i], 5);
-//    }
-    
-    ofRect(centerOfRings.x,centerOfRings.y,10,10);
+    for (int i=0; i<blobs.size(); i++) {
+        ofColor color;
+        color.setHsb(50, 255, 255);
+        ofSetColor(color);
+        ofCircle(blobs[i], 5);
+    }
+
+//    ofRect(centerOfRings,10,10);
 
 }
 

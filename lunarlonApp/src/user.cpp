@@ -10,7 +10,7 @@
 
 void User::setup(){
     nPoints = 12;
-    radius = 50;
+    radius = 100;
     mesh.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
 }
 

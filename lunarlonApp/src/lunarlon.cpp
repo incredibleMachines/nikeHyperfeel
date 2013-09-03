@@ -6,7 +6,7 @@ void lunarlon::setup(){
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
 
-    	touchSend.setup("192.168.1.10", SEND_PORT);
+    	touchSend.setup("192.168.0.55", SEND_PORT);
         touchReceive.setup( RECEIVE_PORT);
     
     int nRings;
@@ -315,10 +315,10 @@ void lunarlon::draw(){
     else if(stageState == 2){
         bg.draw(0,0,ofGetWidth(),ofGetHeight());
         
-//        //Draw user graphics
-//        for(int i=0; i<blobPoints.size();i++){
-//            users[i].draw();
-//        }
+        //Draw user graphics
+        for(int i=0; i<blobPoints.size();i++){
+            users[i].draw();
+        }
         
         ringmaster.draw();
 
