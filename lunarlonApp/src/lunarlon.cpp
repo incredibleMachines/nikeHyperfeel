@@ -10,7 +10,7 @@ void lunarlon::setup(){
     
     //Background
     ofBackground(0);
-    bg.loadImage("bg_1.jpg");
+//    bg.loadImage("bg_1.jpg");
     
     //RingMaster
     ringmaster.setup();
