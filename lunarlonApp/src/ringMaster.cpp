@@ -22,10 +22,10 @@ void RingMaster::setup(){
     bStartCount = false;
     
     //Rings
-    nRings = 35;
+    nRings = 38;
     int nParticlesRingZero = 4;
     particleDist = 1;
-    particleSpringiness = 0.7;
+    particleSpringiness = 0.4;
     float initRadius = 10;
     
     for (int i=0; i<nRings; i++) {
@@ -35,10 +35,11 @@ void RingMaster::setup(){
     
     for (int i=0; i<rings.size(); i++) {
         rings[i].setup(nParticlesRingZero*i, centerOfRings, initRadius * i, particleSpringiness, particleDist);
-        rings[i].p2pForceStrength = 0.1;
-        rings[i].p2pForceRadius = 10*i;
+        rings[i].p2pForceStrength = 0.4;
+        rings[i].p2pForceRadius = 11*i;
 
     }
+    
 }
 
 //--------------------------------------------------------------
@@ -64,12 +65,15 @@ void RingMaster::draw(){
     }
     
     //Draw blob points
-    for (int i=0; i<blobs.size(); i++) {
-        ofColor color;
-        color.setHsb(50, 255, 255);
-        ofSetColor(color);
-        ofCircle(blobs[i], 5);
-    }
+//    for (int i=0; i<blobs.size(); i++) {
+//        ofColor color;
+//        color.setHsb(50, 255, 255);
+//        ofSetColor(color);
+//        ofCircle(blobs[i], 5);
+//    }
+    
+    ofRect(centerOfRings.x,centerOfRings.y,10,10);
+
 }
 
 //--------------------------------------------------------------
