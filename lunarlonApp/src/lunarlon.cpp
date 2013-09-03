@@ -5,8 +5,7 @@ void lunarlon::setup(){
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
-    
-    
+
     	touchSend.setup("192.168.1.10", SEND_PORT);
         touchReceive.setup( RECEIVE_PORT);
     
@@ -338,7 +337,8 @@ void lunarlon::keyPressed(int key){
 
     switch (key) {
         case 't':
-            bTouch = !bTouch;
+            bTouch = true;
+
             sendTouch();
             break;
             
@@ -386,10 +386,16 @@ void lunarlon::keyPressed(int key){
 
 //--------------------------------------------------------------
 void lunarlon::keyReleased(int key){
+    switch (key) {
+        case 't':
+            bTouch = false;
+            sendOff();
+            break;
+
+    }
     if(bDrawAdmin){
         admin.keyReleased(key);
     }
-    
 }
 
 //--------------------------------------------------------------
@@ -449,6 +455,15 @@ void lunarlon::sendTouch(){
     ofxOscMessage m;
     m.setAddress("/touch");
     m.addIntArg(1);
+    touchSend.sendMessage(m);
+    
+}
+
+//--------------------------------------------------------------
+void lunarlon::sendOff(){
+    ofxOscMessage m;
+    m.setAddress("/touch");
+    m.addIntArg(0);
     touchSend.sendMessage(m);
     
 }

@@ -38,7 +38,8 @@ class lunarlon : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    void sendTouch();
+
+    void sendTouch(), sendOff();
     void receiveTouch();
     
 
@@ -105,10 +106,13 @@ class lunarlon : public ofBaseApp{
     //--- syphon
     ofTexture tex;
 	ofxSyphonServer mainOutputSyphonServer;
+
 	ofxSyphonServer individualTextureSyphonServer;
     
     ofxOscSender touchSend;
     ofxOscReceiver touchReceive;
+
+
 };
 
 
