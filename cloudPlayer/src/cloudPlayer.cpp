@@ -12,7 +12,11 @@ void cloudPlayer::setup(){
     
     gradientCenter=settings.getValue("CENTER",ofGetWidth()/2);
     gradientWidth=settings.getValue("WIDTH",100);
-    gradientFadeWidth=settings.getValue("FASE",25);
+    gradientFadeWidth=settings.getValue("FADE",25);
+    horizWidth=settings.getValue("HORIZBORDER",90);
+    horizFadeWidth=settings.getValue("HORIZFADE",25);
+    vertWidth=settings.getValue("VERTBORDER",90);
+    vertFadeWidth=settings.getValue("VERTFADE",25);
     
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
@@ -30,6 +34,8 @@ void cloudPlayer::setup(){
 	cloudMovie.loadMovie("movies/"+ofToString(SCREEN)+".mov");
     
     bMask=settings.getValue("MASK",1);
+    bHorizBorder=settings.getValue("HORIZ",0);
+    bVertBorder=settings.getValue("VERT",0);
     bWhite=false;
     cout<<message<<endl;
     
@@ -139,6 +145,55 @@ void cloudPlayer::draw(){
         }
     }
     
+    if(bVertBorder==true){
+        for(int x=0;x<=ofGetWidth();x++){
+            if(x<vertWidth-vertFadeWidth){
+                ofSetColor(0,0,0,255);
+                ofLine(x,0,x,ofGetHeight());
+            }
+            else if(x<vertWidth){
+                int opacity=ofMap(x,vertWidth-vertFadeWidth,vertWidth,255,0);
+                ofSetColor(0,0,0,opacity);
+                ofLine(x,0,x,ofGetHeight());
+            }
+            else if(x>ofGetWidth()-(vertWidth-vertFadeWidth)){
+                ofSetColor(0,0,0,255);
+                ofLine(x,0,x,ofGetHeight());
+
+            }
+            else if (x>ofGetWidth()-vertWidth){
+                int opacity=ofMap(x,ofGetWidth()-vertWidth,ofGetWidth()-(vertWidth-vertFadeWidth),0,255);
+                ofSetColor(0,0,0,opacity);
+                ofLine(x,0,x,ofGetHeight());
+            }
+            
+        }
+    }
+    if(bHorizBorder==true){
+        for(int y=0;y<=ofGetHeight();y++){
+            if(y<horizWidth-horizFadeWidth){
+                ofSetColor(0,0,0,255);
+                ofLine(0,y,ofGetWidth(),y);
+            }
+            else if(y<horizWidth){
+                int opacity=ofMap(y,horizWidth-horizFadeWidth,horizWidth,255,0);
+                ofSetColor(0,0,0,opacity);
+                ofLine(0,y,ofGetWidth(),y);
+            }
+            else if(y>ofGetHeight()-(horizWidth-horizFadeWidth)){
+                ofSetColor(0,0,0,255);
+                ofLine(0,y,ofGetWidth(),y);
+                
+            }
+            else if (y>ofGetHeight()-horizWidth){
+                int opacity=ofMap(y,ofGetHeight()-horizWidth,ofGetHeight()-(horizWidth-horizFadeWidth),0,255);
+                ofSetColor(0,0,0,opacity);
+                ofLine(0,y,ofGetWidth(),y);
+            }
+            
+        }
+    }
+    
     //--- syphon
     tex.loadScreenData(0, 0, ofGetWidth(), ofGetHeight());
     individualTextureSyphonServer.publishTexture(&tex);
@@ -163,8 +218,16 @@ void cloudPlayer::keyPressed  (int key){
         case 'm':
             bMask=!bMask;
             break;
+        case 'b':
+            bHorizBorder=!bHorizBorder;
+            break;
+        case 'B':
+            bVertBorder=!bVertBorder;
+            break;
         case 'M':
-            bMask=true;
+//            bMask=true;
+//            bHorizBorder=true;
+//            bVertBorder=true;
             bWhite=!bWhite;
             break;
         case OF_KEY_RIGHT:
@@ -179,22 +242,66 @@ void cloudPlayer::keyPressed  (int key){
         case OF_KEY_DOWN:
             gradientCenter-=10;
             break;
+        case OF_KEY_LEFT_CONTROL:
+            bAdjustHoriz=true;
+            break;
+        case OF_KEY_LEFT_ALT:
+            bAdjustVert=true;
+            break;
         case '=':
-            gradientWidth++;
+            if(bAdjustHoriz==true){
+                horizWidth++;
+            }
+            else if(bAdjustVert==true){
+                vertWidth++;
+            }
+            else{
+                gradientWidth++;
+            }
             break;
         case ']':
-            gradientFadeWidth++;
+            if(bAdjustHoriz==true){
+                horizFadeWidth++;
+            }
+            else if(bAdjustVert==true){
+                vertFadeWidth++;
+            }
+            else{
+                gradientFadeWidth++;
+            }
             break;
         case '-':
-            gradientWidth--;
+            if(bAdjustHoriz==true){
+                horizWidth--;
+            }
+            else if(bAdjustVert==true){
+                vertWidth--;
+            }
+            else{
+                gradientWidth--;
+            }
             break;
         case '[':
-            gradientFadeWidth--;
+            if(bAdjustHoriz==true){
+                horizFadeWidth--;
+            }
+            else if(bAdjustVert==true){
+                vertFadeWidth--;
+            }
+            else{
+                gradientFadeWidth--;
+            }
             break;
         case ' ':
             settings.setValue("WIDTH",gradientWidth);
             settings.setValue("CENTER",gradientCenter);
             settings.setValue("FADE", gradientFadeWidth);
+            settings.setValue("HORIZBORDER",horizWidth);
+            settings.setValue("HORIZFADE", horizFadeWidth);
+            settings.setValue("VERTBORDER",vertWidth);
+            settings.setValue("VERTFADE", vertFadeWidth);
+            settings.setValue("HORIZ",bHorizBorder);
+            settings.setValue("VERT", bVertBorder);
             settings.setValue("MASK",bMask);
             settings.save("mySettings.xml");
     }
@@ -202,7 +309,14 @@ void cloudPlayer::keyPressed  (int key){
 
 //--------------------------------------------------------------
 void cloudPlayer::keyReleased(int key){
-
+      switch(key){  
+    case OF_KEY_LEFT_CONTROL:
+        bAdjustHoriz=false;
+        break;
+    case OF_KEY_LEFT_ALT:
+        bAdjustVert=false;
+        break;
+      }
 }
 
 //--------------------------------------------------------------

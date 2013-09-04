@@ -37,11 +37,12 @@ class cloudPlayer : public ofBaseApp{
     float fadeOutTimer, fadeInTimer;
     float fadeOutSpeed, fadeInSpeed;
     
-    bool bMask, bWhite;
+    bool bMask, bWhite, bHorizBorder, bVertBorder;
+    bool bAdjustHoriz;
+    bool bAdjustVert;
     
     int gradientCenter;
-    int gradientWidth;
-    int gradientFadeWidth;
+    int gradientWidth, gradientFadeWidth, horizWidth, horizFadeWidth, vertWidth, vertFadeWidth;
     
     ofxXmlSettings settings;
     		string message;
