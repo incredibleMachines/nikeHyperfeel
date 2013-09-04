@@ -6,7 +6,7 @@ void lunarlonStatue::setup(){
 	ofBackground(40, 100, 40);
 
 	// open an outgoing connection to HOST:PORT
-	sender.setup("192.168.0.101", SEND_PORT);
+	sender.setup("192.168.1.10", SEND_PORT);
     receiver.setup(RECEIVE_PORT);
     bTouched=false;
     ofBackground(255);
