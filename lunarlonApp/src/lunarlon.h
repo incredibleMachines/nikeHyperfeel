@@ -128,6 +128,7 @@ class lunarlon : public ofBaseApp{
     
     //--- sculpture detection
     SculptureTouch sculpture;
+    bool bShowSculpture;
 
 };
 

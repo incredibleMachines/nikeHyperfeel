@@ -63,6 +63,7 @@ void SculptureTouch::update(){
                 
                 ((lunarlon *)ofGetAppPtr())->bTouch = true;
                 //((lunarlon *)ofGetAppPtr())->sendTouch();
+                break;
                 
             } else {
                 ((lunarlon *)ofGetAppPtr())->bTouch = false;

@@ -21,6 +21,7 @@ void lunarlon::setup(){
     
     //--- touch & sculpture
     bTouch = false;
+    bShowSculpture = false;
     sculpture.setup();
     
     //--- touch animation
@@ -338,7 +339,7 @@ void lunarlon::draw(){
         ringmaster.draw();
         
 //        //--- sculpture
-//        sculpture.draw();
+        if(bShowSculpture) sculpture.draw();
 //        
 //        // report touch animation amount
 //        ofDrawBitmapString(ofToString(TouchReactionAmt), 100,200);
@@ -392,6 +393,10 @@ void lunarlon::keyPressed(int key){
             
         case 'm':
             mouseAsBlob = !mouseAsBlob; //use mouse as a blob
+            break;
+        
+        case 's':
+            bShowSculpture = !bShowSculpture; //draw the outline of the sculpture on stage
             break;
             
 //        case 'r':
