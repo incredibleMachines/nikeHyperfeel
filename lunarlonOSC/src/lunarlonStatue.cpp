@@ -25,6 +25,8 @@ void lunarlonStatue::setup(){
     camWidth = 320;//640;
     camHeight = 240;//480;
     
+    admin.setup();
+    
     camZoom.x=850;
     camZoom.y=400;
     camOffset.x=-350;
@@ -256,7 +258,7 @@ void lunarlonStatue::draw(){
         camera.draw(stagingX, stagingY, stageWidth, stageHeight);
         for(int j=0;j<blobPoints.size();j++){
             
-            blobs[j].blob.draw();
+//            blobs[j].blob.draw();
             ofFill();
             ofSetColor(255,0,0);
             ofEllipse(blobPoints[j].x, blobPoints[j].y,10,10);
@@ -310,6 +312,7 @@ void lunarlonStatue::draw(){
         ofColor bgColor;
         bgColor.setHsb(78, 100 + 155*touch(), 255*touch());
         ofBackground(0);
+        ofFill();
         
         // display instructions
         string buf;

@@ -278,7 +278,7 @@ void lunarlon::draw(){
         camera.draw(stagingX, stagingY, stageWidth, stageHeight);
         for(int j=0;j<blobPoints.size();j++){
 
-            blobs[j].blob.draw();
+//            blobs[j].blob.draw();
             ofFill();
             ofSetColor(255,0,0);
             ofEllipse(blobPoints[j].x, blobPoints[j].y,10,10);
