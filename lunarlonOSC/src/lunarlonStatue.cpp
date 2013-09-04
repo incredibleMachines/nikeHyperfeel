@@ -6,7 +6,7 @@ void lunarlonStatue::setup(){
 	ofBackground(40, 100, 40);
 
 	// open an outgoing connection to HOST:PORT
-	sender.setup("192.168.0.101", SEND_PORT);
+	sender.setup("192.168.1.10", SEND_PORT);
     receiver.setup(RECEIVE_PORT);
     bTouched=false;
     ofBackground(255);
@@ -24,6 +24,8 @@ void lunarlonStatue::setup(){
     //--- camera
     camWidth = 320;//640;
     camHeight = 240;//480;
+    
+    admin.setup();
     
     camZoom.x=850;
     camZoom.y=400;
@@ -256,7 +258,7 @@ void lunarlonStatue::draw(){
         camera.draw(stagingX, stagingY, stageWidth, stageHeight);
         for(int j=0;j<blobPoints.size();j++){
             
-            blobs[j].blob.draw();
+//            blobs[j].blob.draw();
             ofFill();
             ofSetColor(255,0,0);
             ofEllipse(blobPoints[j].x, blobPoints[j].y,10,10);
@@ -310,6 +312,7 @@ void lunarlonStatue::draw(){
         ofColor bgColor;
         bgColor.setHsb(78, 100 + 155*touch(), 255*touch());
         ofBackground(0);
+        ofFill();
         
         // display instructions
         string buf;

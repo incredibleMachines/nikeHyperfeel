@@ -13,7 +13,6 @@ void AdminWindow::setup(){
     ofxControlPanel::setBackgroundColor(simpleColor(0,0,0, 50));
 	ofxControlPanel::setTextColor(simpleColor(240, 50, 50, 255));
 	gui.loadFont("fonts/Helvetica.dfont", 8);
-    
     gui.setup("TONES EZ ADMIN", 0, 0, ofGetWidth(), 700);
     gui.addPanel("Setup", 0, false);
     gui.setWhichPanel(0);
