@@ -107,13 +107,18 @@ void cloudSender::keyPressed(int key){
 		m.setAddress("/on");
 		m.addIntArg(3);
 		three.sendMessage(m);
+        
+        ofxOscMessage n;
+		n.setAddress("/on");
+		n.addIntArg(4);
+		four.sendMessage(n);
 	}
-    if(key == '4'){
-		ofxOscMessage m;
-		m.setAddress("/on");
-		m.addIntArg(4);
-		four.sendMessage(m);
-	}
+//    if(key == '4'){
+//		ofxOscMessage m;
+//		m.setAddress("/on");
+//		m.addIntArg(4);
+//		four.sendMessage(m);
+//	}
 }
 
 //--------------------------------------------------------------
@@ -135,13 +140,18 @@ void cloudSender::keyReleased(int key){
 		m.setAddress("/off");
 		m.addIntArg(3);
 		three.sendMessage(m);
+        
+        ofxOscMessage n;
+		n.setAddress("/off");
+		n.addIntArg(4);
+		four.sendMessage(n);
 	}
-    if(key == '4'){
-		ofxOscMessage m;
-		m.setAddress("/off");
-		m.addIntArg(4);
-		four.sendMessage(m);
-	}
+//    if(key == '4'){
+//		ofxOscMessage m;
+//		m.setAddress("/off");
+//		m.addIntArg(4);
+//		four.sendMessage(m);
+//	}
 }
 
 //--------------------------------------------------------------
@@ -193,19 +203,24 @@ void cloudSender::newMidiMessage(ofxMidiMessage& msg) {
             m.addIntArg(1);
             one.sendMessage(m);
         }
-        else if(msg.pitch == START_PITCH+1){
+        else if(msg.pitch == START_PITCH+PITCH_INTERVAL){
             ofxOscMessage m;
             m.setAddress("/on");
             m.addIntArg(2);
             two.sendMessage(m);
         }
-        else if(msg.pitch == START_PITCH+2){
+        else if(msg.pitch == START_PITCH+PITCH_INTERVAL*2){
             ofxOscMessage m;
             m.setAddress("/on");
             m.addIntArg(3);
             three.sendMessage(m);
+            
+            ofxOscMessage n;
+            n.setAddress("/on");
+            n.addIntArg(4);
+            four.sendMessage(n);
         }
-        else if(msg.pitch == START_PITCH+3){
+        else if(msg.pitch == START_PITCH+PITCH_INTERVAL*3){ //--- should never happen
             ofxOscMessage m;
             m.setAddress("/on");
             m.addIntArg(4);
@@ -220,19 +235,24 @@ void cloudSender::newMidiMessage(ofxMidiMessage& msg) {
             m.addIntArg(1);
             one.sendMessage(m);
         }
-        else if(msg.pitch == START_PITCH+1){
+        else if(msg.pitch == START_PITCH+PITCH_INTERVAL){
             ofxOscMessage m;
             m.setAddress("/off");
             m.addIntArg(2);
             two.sendMessage(m);
         }
-        else if(msg.pitch == START_PITCH+2){
+        else if(msg.pitch == START_PITCH+PITCH_INTERVAL*2){
             ofxOscMessage m;
             m.setAddress("/off");
             m.addIntArg(3);
             three.sendMessage(m);
+            
+            ofxOscMessage n;
+            n.setAddress("/off");
+            n.addIntArg(4);
+            four.sendMessage(n);
         }
-        else if(msg.pitch == START_PITCH+3){
+        else if(msg.pitch == START_PITCH+PITCH_INTERVAL*3){ //--- should never happen
             ofxOscMessage m;
             m.setAddress("/off");
             m.addIntArg(4);
@@ -240,4 +260,3 @@ void cloudSender::newMidiMessage(ofxMidiMessage& msg) {
         }
     }
 }
-
