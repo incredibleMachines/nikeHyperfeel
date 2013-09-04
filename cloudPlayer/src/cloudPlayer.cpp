@@ -11,12 +11,10 @@ void cloudPlayer::setup(){
 	}
     
     gradientCenter=settings.getValue("CENTER",ofGetWidth()/2);
-    gradientWidth=settings.getValue("WIDTH",100);
-    gradientFadeWidth=settings.getValue("FADE",25);
-    horizWidth=settings.getValue("HORIZBORDER",90);
-    horizFadeWidth=settings.getValue("HORIZFADE",25);
-    vertWidth=settings.getValue("VERTBORDER",90);
-    vertFadeWidth=settings.getValue("VERTFADE",25);
+
+
+    
+    
     
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
@@ -26,28 +24,48 @@ void cloudPlayer::setup(){
     bFadingIn=false;
     fadeOutSpeed=1500;
     fadeInSpeed=500;
-
+    flipHorizontal = false;
+    
 	// Uncomment this to show movies with alpha channels
 	// cloudMovie.setPixelFormat(OF_PIXELS_RGBA);
     
     receiver.setup(PORT);
-
+    
 	cloudMovie.loadMovie("movies/"+ofToString(SCREEN)+".mov");
     
     bMask=settings.getValue("MASK",1);
-    bHorizBorder=settings.getValue("HORIZ",0);
-    bVertBorder=settings.getValue("VERT",0);
+
+    
+    //---new controls
+    
+    selectionColor.set(255, 0, 0);
+    
+    gradientWidth=settings.getValue("WIDTH",100);
+    gradientFadeWidth=settings.getValue("FADE",25);
+    
+    leftWidth=settings.getValue("LEFTBORDER",90);
+    rightWidth=settings.getValue("RIGHTBORDER",90);
+    upperWidth=settings.getValue("RIGHTBORDER",90);
+    lowerWidth=settings.getValue("RIGHTBORDER",90);
+   
+    bLeftBorder=settings.getValue("LEFT", 0);
+    bRightBorder=settings.getValue("RIGHT", 0);
+    bUpperBorder=settings.getValue("LEFT", 0);
+    bLowerBorder=settings.getValue("RIGHT", 0);
+    
+    
+    
     bWhite=false;
     cout<<message<<endl;
     
-        tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
-
+    tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
+    
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::update(){
     if(bFadingOut==false&&cloudMovie.isPlaying()){
-//        cout<< cloudMovie.getDuration()<< " postion: "<<cloudMovie.getPosition()*cloudMovie.getDuration()<<endl;
+        //        cout<< cloudMovie.getDuration()<< " postion: "<<cloudMovie.getPosition()*cloudMovie.getDuration()<<endl;
         if(cloudMovie.getDuration()*1000-cloudMovie.getPosition()*cloudMovie.getDuration()*1000<fadeOutSpeed){
             cout<<"fade"<<endl;
             fadeOut();
@@ -59,22 +77,22 @@ void cloudPlayer::update(){
 		receiver.getNextMessage(&m);
         if(m.getAddress()=="/on"){
             
-                if(!cloudMovie.isPlaying()){
-                    cloudMovie.play();
-                    cloudMovie.setLoopState(OF_LOOP_NONE);
-                    fadeIn();
-                }
+            if(!cloudMovie.isPlaying()){
+                cloudMovie.play();
+                cloudMovie.setLoopState(OF_LOOP_NONE);
+                fadeIn();
+            }
             
         }
         else if(m.getAddress()=="/off"){
-
-                if(cloudMovie.isPlaying()){
-                    fadeOut();
-                }
+            
+            if(cloudMovie.isPlaying()){
+                fadeOut();
+            }
             
         }
     }
-  
+    
     if(cloudMovie.isPlaying()){
         cloudMovie.update();
     }
@@ -84,16 +102,17 @@ void cloudPlayer::update(){
 void cloudPlayer::draw(){
     
     ofBackground(0,0,0);
-
+    
 	ofSetHexColor(0xFFFFFF);
     
     if(cloudMovie.isPlaying()){
         if(bFadingOut==true){
             if(ofGetElapsedTimeMillis()-fadeOutTimer<fadeOutSpeed){
                 float color=255-(255*((ofGetElapsedTimeMillis()-fadeOutTimer)/fadeOutSpeed));
-//                cout<<((ofGetElapsedTimeMillis()-fadeOutTimer)/fadeOutSpeed)<<endl;
+                //                cout<<((ofGetElapsedTimeMillis()-fadeOutTimer)/fadeOutSpeed)<<endl;
                 ofSetColor(color);
                 cloudMovie.draw(0,0);
+//                cloudMovie.draw(0, 0, -cloudMovie.getWidth(), cloudMovie.getHeight());
             }
             else{
                 cloudMovie.stop();
@@ -104,7 +123,7 @@ void cloudPlayer::draw(){
         else if(bFadingIn==true){
             if(ofGetElapsedTimeMillis()-fadeInTimer<fadeInSpeed){
                 float color=255*((ofGetElapsedTimeMillis()-fadeInTimer)/fadeInSpeed);
-//                cout<<((ofGetElapsedTimeMillis()-fadeInTimer)/fadeInSpeed)<<endl;
+                //                cout<<((ofGetElapsedTimeMillis()-fadeInTimer)/fadeInSpeed)<<endl;
                 ofSetColor(color);
                 cloudMovie.draw(0,0);
             }
@@ -117,7 +136,7 @@ void cloudPlayer::draw(){
         else{
             cloudMovie.draw(0,0);
         }
-    
+        
         
     }
     
@@ -142,71 +161,126 @@ void cloudPlayer::draw(){
                 ofSetColor(0,0,0,255);
                 ofLine(startPixel+i,0,startPixel+i,ofGetHeight());
             }
-
+            
         }
     }
     
-    if(bVertBorder==true){
+    //--- borders
+    if(bLeftBorder){
         for(int x=0;x<=ofGetWidth();x++){
-            if(x<vertWidth-vertFadeWidth){
-                ofSetColor(0,0,0,255);
+            if(x<leftWidth-leftFadeWidth){
+                
+                if (bAdjustLeft) {
+                    ofSetColor(selectionColor,255);
+                }else{
+                    ofSetColor(0,0,0,255);
+                }
                 ofLine(x,0,x,ofGetHeight());
             }
-            else if(x<vertWidth){
-                int opacity=ofMap(x,vertWidth-vertFadeWidth,vertWidth,255,0);
-                ofSetColor(0,0,0,opacity);
-                ofLine(x,0,x,ofGetHeight());
-            }
-            else if(x>ofGetWidth()-(vertWidth-vertFadeWidth)){
-                ofSetColor(0,0,0,255);
-                ofLine(x,0,x,ofGetHeight());
+            else if(x<leftWidth){
+                int opacity=ofMap(x,leftWidth-leftFadeWidth,leftWidth,255,0);
+                
+                if (bAdjustLeft) {
+                    ofSetColor(selectionColor,opacity);
+                }else{
+                    ofSetColor(0,0,0,opacity);
+                }
 
-            }
-            else if (x>ofGetWidth()-vertWidth){
-                int opacity=ofMap(x,ofGetWidth()-vertWidth,ofGetWidth()-(vertWidth-vertFadeWidth),0,255);
-                ofSetColor(0,0,0,opacity);
                 ofLine(x,0,x,ofGetHeight());
             }
             
         }
     }
-    if(bHorizBorder==true){
+    
+    if(bRightBorder){
+        for(int x=0;x<=ofGetWidth();x++){
+            if(x>ofGetWidth()-(rightWidth-rightFadeWidth)){
+                if (bAdjustRight) {
+                    ofSetColor(selectionColor,255);
+                }else{
+                    ofSetColor(0,0,0,255);
+                }
+                ofLine(x,0,x,ofGetHeight());
+                
+            }
+            else if (x>ofGetWidth()-leftWidth){
+                int opacity=ofMap(x,ofGetWidth()-rightWidth,ofGetWidth()-(rightWidth-rightFadeWidth),0,255);
+                if (bAdjustRight) {
+                    ofSetColor(selectionColor,opacity);
+                }else{
+                    ofSetColor(0,0,0,opacity);
+                }
+                ofLine(x,0,x,ofGetHeight());
+            }
+        }
+    }
+    
+    if(bUpperBorder==true){
         for(int y=0;y<=ofGetHeight();y++){
-            if(y<horizWidth-horizFadeWidth){
-                ofSetColor(0,0,0,255);
+            if(y<upperWidth-upperFadeWidth){
+                if (bAdjustUpper) {
+                    ofSetColor(selectionColor,255);
+                }else{
+                    ofSetColor(0,0,0,255);
+                }
                 ofLine(0,y,ofGetWidth(),y);
             }
-            else if(y<horizWidth){
-                int opacity=ofMap(y,horizWidth-horizFadeWidth,horizWidth,255,0);
-                ofSetColor(0,0,0,opacity);
+            else if(y<upperWidth){
+                int opacity=ofMap(y,upperWidth-upperFadeWidth,upperWidth,255,0);
+                if (bAdjustUpper) {
+                    ofSetColor(selectionColor,opacity);
+                }else{
+                    ofSetColor(0,0,0,opacity);
+                }
                 ofLine(0,y,ofGetWidth(),y);
-            }
-            else if(y>ofGetHeight()-(horizWidth-horizFadeWidth)){
-                ofSetColor(0,0,0,255);
+            }            
+        }
+    }
+    
+    
+    if(bLowerBorder==true){
+        for(int y=0;y<=ofGetHeight();y++){
+            if(y>ofGetHeight()-(lowerWidth-lowerFadeWidth)){
+                if (bAdjustLower) {
+                    ofSetColor(selectionColor,255);
+                }else{
+                    ofSetColor(0,0,0,255);
+                }
+
                 ofLine(0,y,ofGetWidth(),y);
                 
             }
-            else if (y>ofGetHeight()-horizWidth){
-                int opacity=ofMap(y,ofGetHeight()-horizWidth,ofGetHeight()-(horizWidth-horizFadeWidth),0,255);
-                ofSetColor(0,0,0,opacity);
+            else if (y>ofGetHeight()-lowerWidth){
+                int opacity=ofMap(y,ofGetHeight()-lowerWidth,ofGetHeight()-(lowerWidth-lowerFadeWidth),0,255);
+                if (bAdjustLower) {
+                    ofSetColor(selectionColor,opacity);
+                }else{
+                    ofSetColor(0,0,0,opacity);
+                }
                 ofLine(0,y,ofGetWidth(),y);
             }
-            
         }
     }
+
+    
+
+
+    
+    
+    
     
     //--- syphon
     tex.loadScreenData(0, 0, ofGetWidth(), ofGetHeight());
     individualTextureSyphonServer.publishTexture(&tex);
     ofSetColor(255);
-
-}
     
-    //--------------------------------------------------------------
-    void cloudPlayer::fadeOut(){
-        bFadingOut=true;
-        fadeOutTimer=ofGetElapsedTimeMillis();
-    }
+}
+
+//--------------------------------------------------------------
+void cloudPlayer::fadeOut(){
+    bFadingOut=true;
+    fadeOutTimer=ofGetElapsedTimeMillis();
+}
 //--------------------------------------------------------------
 void cloudPlayer::fadeIn(){
     bFadingIn=true;
@@ -219,16 +293,55 @@ void cloudPlayer::keyPressed  (int key){
         case 'm':
             bMask=!bMask;
             break;
-        case 'b':
-            bHorizBorder=!bHorizBorder;
+ 
+        case '1':
+            bLeftBorder=!bLeftBorder;
             break;
-        case 'B':
-            bVertBorder=!bVertBorder;
+        case '2':
+            bRightBorder=!bRightBorder;
             break;
+        case '3':
+            bUpperBorder=!bUpperBorder;
+            break;
+        case '4':
+            bLowerBorder=!bLowerBorder;
+            break;
+            
+            
+        case 'f':
+            flipHorizontal = !flipHorizontal;
+            break;
+ 
+        case 'q':
+            bAdjustLeft = !bAdjustLeft;
+            bAdjustRight = false;
+            bAdjustUpper = false;
+            bAdjustLower = false;
+
+            break;
+        case 'w':
+            bAdjustRight = !bAdjustRight;
+            bAdjustLeft = false;
+            bAdjustUpper = false;
+            bAdjustLower = false;
+            break;
+        case 'e':
+            bAdjustUpper = !bAdjustUpper;
+            bAdjustLeft = false;
+            bAdjustRight = false;
+            bAdjustLower = false;
+            break;
+        case 'r':
+            bAdjustLower = !bAdjustLower;
+            bAdjustLeft = false;
+            bAdjustRight = false;
+            bAdjustUpper = false;
+            break;
+ 
         case 'M':
-//            bMask=true;
-//            bHorizBorder=true;
-//            bVertBorder=true;
+            //            bMask=true;
+            //            bHorizBorder=true;
+            //            bVertBorder=true;
             bWhite=!bWhite;
             break;
         case OF_KEY_RIGHT:
@@ -243,66 +356,85 @@ void cloudPlayer::keyPressed  (int key){
         case OF_KEY_DOWN:
             gradientCenter-=10;
             break;
-        case OF_KEY_LEFT_CONTROL:
-            bAdjustHoriz=true;
-            break;
-        case OF_KEY_LEFT_ALT:
-            bAdjustVert=true;
-            break;
-        case '=':
-            if(bAdjustHoriz==true){
-                horizWidth++;
-            }
-            else if(bAdjustVert==true){
-                vertWidth++;
-            }
-            else{
-                gradientWidth++;
-            }
-            break;
-        case ']':
-            if(bAdjustHoriz==true){
-                horizFadeWidth++;
-            }
-            else if(bAdjustVert==true){
-                vertFadeWidth++;
-            }
-            else{
-                gradientFadeWidth++;
-            }
-            break;
+
+        
         case '-':
-            if(bAdjustHoriz==true){
-                horizWidth--;
+            if(bAdjustLeft==true){
+                leftWidth--;
             }
-            else if(bAdjustVert==true){
-                vertWidth--;
+            else if(bAdjustRight==true){
+                rightWidth--;
+            }
+            else if(bAdjustUpper==true){
+                upperWidth--;
+            }
+            else if(bAdjustLower==true){
+                lowerWidth--;
             }
             else{
                 gradientWidth--;
             }
             break;
-        case '[':
-            if(bAdjustHoriz==true){
-                horizFadeWidth--;
+        
+        case '=':
+            if(bAdjustLeft==true){
+                leftWidth++;
             }
-            else if(bAdjustVert==true){
-                vertFadeWidth--;
+            else if(bAdjustRight==true){
+                rightWidth++;
+            }
+            else if(bAdjustUpper==true){
+                upperWidth++;
+            }
+            else if(bAdjustLower==true){
+                lowerWidth++;
+            }
+            else{
+                gradientWidth++;
+            }
+            break;
+            
+        case '[':
+            if(bAdjustLeft==true){
+                leftFadeWidth--;
+            }
+            else if(bAdjustRight==true){
+                rightFadeWidth--;
+            }
+            else if(bAdjustUpper==true){
+                upperFadeWidth--;
+            }
+            else if(bAdjustLower==true){
+                lowerFadeWidth--;
             }
             else{
                 gradientFadeWidth--;
             }
             break;
+            
+            
+        case ']':
+            if(bAdjustLeft==true){
+                leftFadeWidth++;
+            }
+            else if(bAdjustRight==true){
+                rightFadeWidth++;
+            }
+            else if(bAdjustUpper==true){
+                upperFadeWidth++;
+            }
+            else if(bAdjustLower==true){
+                lowerFadeWidth++;
+            }
+            else{
+                gradientFadeWidth++;
+            }
+            break;
+ 
         case ' ':
             settings.setValue("WIDTH",gradientWidth);
             settings.setValue("CENTER",gradientCenter);
             settings.setValue("FADE", gradientFadeWidth);
-            settings.setValue("HORIZBORDER",horizWidth);
-            settings.setValue("HORIZFADE", horizFadeWidth);
-            settings.setValue("VERTBORDER",vertWidth);
-            settings.setValue("VERTFADE", vertFadeWidth);
-            settings.setValue("HORIZ",bHorizBorder);
-            settings.setValue("VERT", bVertBorder);
             settings.setValue("MASK",bMask);
             settings.save("mySettings.xml");
     }
@@ -310,48 +442,41 @@ void cloudPlayer::keyPressed  (int key){
 
 //--------------------------------------------------------------
 void cloudPlayer::keyReleased(int key){
-      switch(key){  
-    case OF_KEY_LEFT_CONTROL:
-        bAdjustHoriz=false;
-        break;
-    case OF_KEY_LEFT_ALT:
-        bAdjustVert=false;
-        break;
-      }
+
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::mouseMoved(int x, int y ){
-
+    
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::mouseDragged(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::mousePressed(int x, int y, int button){
-
+    
 }
 
 
 //--------------------------------------------------------------
 void cloudPlayer::mouseReleased(int x, int y, int button){
-
+    
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::windowResized(int w, int h){
-
+    
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::gotMessage(ofMessage msg){
-
+    
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::dragEvent(ofDragInfo dragInfo){ 
-
+    
 }

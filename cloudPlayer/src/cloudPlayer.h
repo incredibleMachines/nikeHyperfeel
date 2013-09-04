@@ -33,16 +33,25 @@ class cloudPlayer : public ofBaseApp{
 		ofVideoPlayer 		cloudMovie;
         ofxOscReceiver receiver;
     
+    //--Movie flip
+    bool flipHorizontal;
+    
     bool bFadingOut, bFadingIn;
     float fadeOutTimer, fadeInTimer;
     float fadeOutSpeed, fadeInSpeed;
     
-    bool bMask, bWhite, bHorizBorder, bVertBorder;
-    bool bAdjustHoriz;
-    bool bAdjustVert;
+    bool bMask, bWhite;
+
+    bool bLeftBorder, bRightBorder, bUpperBorder, bLowerBorder;
+    bool bAdjustLeft, bAdjustRight, bAdjustUpper, bAdjustLower;
+    int leftWidth, leftFadeWidth;
+    int rightWidth, rightFadeWidth;
+    int upperWidth, upperFadeWidth;
+    int lowerWidth, lowerFadeWidth;
     
     int gradientCenter;
     int gradientWidth, gradientFadeWidth, horizWidth, horizFadeWidth, vertWidth, vertFadeWidth;
+    ofColor selectionColor;
     
     ofxXmlSettings settings;
     		string message;
