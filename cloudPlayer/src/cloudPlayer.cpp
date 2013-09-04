@@ -32,6 +32,8 @@ void cloudPlayer::setup(){
     bMask=settings.getValue("MASK",1);
     bWhite=false;
     cout<<message<<endl;
+    
+        tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
 
 }
 
@@ -138,6 +140,11 @@ void cloudPlayer::draw(){
 
         }
     }
+    
+    //--- syphon
+    tex.loadScreenData(0, 0, ofGetWidth(), ofGetHeight());
+    individualTextureSyphonServer.publishTexture(&tex);
+    ofSetColor(255);
 
 }
     

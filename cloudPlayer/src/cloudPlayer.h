@@ -4,6 +4,8 @@
 #include "ofxOsc.h"
 #include "ofxXmlSettings.h"
 
+#include "ofxSyphon.h"
+
 #define PORT 12345
 #define SCREEN 4
 
@@ -43,6 +45,11 @@ class cloudPlayer : public ofBaseApp{
     
     ofxXmlSettings settings;
     		string message;
+    
+    //--- syphon
+    ofTexture tex;
+	ofxSyphonServer mainOutputSyphonServer;
+	ofxSyphonServer individualTextureSyphonServer;
 
 };
 
