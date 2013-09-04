@@ -5,7 +5,8 @@
 #include "ofxMidi.h"
 
 #define PORT 12345
-#define START_PITCH 44
+#define START_PITCH 13
+#define PITCH_INTERVAL 2
 
 //--------------------------------------------------------
 class cloudSender : public ofBaseApp, public ofxMidiListener {
