@@ -7,7 +7,7 @@
 #include "ofxSyphon.h"
 
 #define PORT 12345
-#define SCREEN 4
+#define SCREEN 3
 
 class cloudPlayer : public ofBaseApp{
 

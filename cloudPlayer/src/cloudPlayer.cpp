@@ -20,6 +20,7 @@ void cloudPlayer::setup(){
     
 	ofBackground(0,0,0);
 	ofSetVerticalSync(true);
+    ofSetFrameRate(24);
     
     bFadingOut=false;
     bFadingIn=false;
