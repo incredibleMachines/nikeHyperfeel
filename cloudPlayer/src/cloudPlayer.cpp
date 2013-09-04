@@ -51,22 +51,20 @@ void cloudPlayer::update(){
 		ofxOscMessage m;
 		receiver.getNextMessage(&m);
         if(m.getAddress()=="/on"){
-            if (m.getArgAsInt32(0)==SCREEN)
-            {
+            
                 if(!cloudMovie.isPlaying()){
                     cloudMovie.play();
                     cloudMovie.setLoopState(OF_LOOP_NONE);
                     fadeIn();
                 }
-            }
+            
         }
         else if(m.getAddress()=="/off"){
-            if (m.getArgAsInt32(0)==SCREEN)
-            {
+
                 if(cloudMovie.isPlaying()){
                     fadeOut();
                 }
-            }
+            
         }
     }
   
