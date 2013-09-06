@@ -274,10 +274,10 @@ void particle::bounceOffWalls(){
 	bool bDidICollide = false;
 	
 	// what are the walls
-	float minx = 0;
-	float miny = 0;
-	float maxx = ofGetWidth();
-	float maxy = ofGetHeight();
+	float minx = 50;
+	float miny = 70;
+	float maxx = ofGetWidth()-50;
+	float maxy = ofGetHeight()-50;
 	
 	if (pos.x > maxx){
 		pos.x = maxx; // move to the edge, (important!)
@@ -326,6 +326,6 @@ void particle::changeColor(ofVec2f _pos, float _radius){
 		float pct = 1 - (length / _radius);  // stronger on the inside
         //		diff.normalize();
         color.setHsb(78, 100 + 155*pct, 240 + 10*pct, 255);
-        particleRadius = 1 + 2.5 * pct;
+        particleRadius = 2 + 3.5 * pct;
     }
 }

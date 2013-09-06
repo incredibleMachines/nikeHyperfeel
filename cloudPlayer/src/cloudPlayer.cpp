@@ -33,25 +33,31 @@ void cloudPlayer::setup(){
     
 	cloudMovie.loadMovie("movies/"+ofToString(SCREEN)+".mov");
     
-    bMask=settings.getValue("MASK",1);
 
     
     //---new controls
     
     selectionColor.set(255, 0, 0);
     
+    gradientCenter=settings.getValue("CENTER",ofGetWidth()/2);
     gradientWidth=settings.getValue("WIDTH",100);
     gradientFadeWidth=settings.getValue("FADE",25);
+    bMask=settings.getValue("MASK",1);
     
     leftWidth=settings.getValue("LEFTBORDER",90);
     rightWidth=settings.getValue("RIGHTBORDER",90);
-    upperWidth=settings.getValue("RIGHTBORDER",90);
-    lowerWidth=settings.getValue("RIGHTBORDER",90);
+    upperWidth=settings.getValue("UPPERBORDER",90);
+    lowerWidth=settings.getValue("LOWERBORDER",90);
+    
+    leftFadeWidth=settings.getValue("LEFTFADE",10);
+    rightFadeWidth=settings.getValue("RIGHTFADE",10);
+    upperFadeWidth=settings.getValue("UPPERFADE",10);
+    lowerFadeWidth=settings.getValue("LOWERFADE",10);
    
     bLeftBorder=settings.getValue("LEFT", 0);
     bRightBorder=settings.getValue("RIGHT", 0);
-    bUpperBorder=settings.getValue("LEFT", 0);
-    bLowerBorder=settings.getValue("RIGHT", 0);
+    bUpperBorder=settings.getValue("UPPER", 0);
+    bLowerBorder=settings.getValue("LOWER", 0);
     
     
     
@@ -436,12 +442,44 @@ void cloudPlayer::keyPressed  (int key){
             settings.setValue("CENTER",gradientCenter);
             settings.setValue("FADE", gradientFadeWidth);
             settings.setValue("MASK",bMask);
+            
+            settings.setValue("LEFTBORDER",leftWidth);
+            settings.setValue("RIGHTBORDER",rightWidth);
+            settings.setValue("UPPERBORDER",upperWidth);
+            settings.setValue("LOWERBORDER",lowerWidth);
+            
+            settings.setValue("LEFTFADE",leftFadeWidth);
+            settings.setValue("RIGHTFADE",rightFadeWidth);
+            settings.setValue("UPPERFADE",upperFadeWidth);
+            settings.setValue("LOWERFADE",lowerFadeWidth);
+            
+            settings.setValue("LEFT",bLeftBorder);
+            settings.setValue("RIGHT", bRightBorder);
+            settings.setValue("UPPER", bUpperBorder);
+            settings.setValue("LOWER", bLowerBorder);
             settings.save("mySettings.xml");
+            break;
+        case 'p':  
+                if(!cloudMovie.isPlaying()){
+                    cloudMovie.play();
+                    cloudMovie.setLoopState(OF_LOOP_NONE);
+                    fadeIn();
+                }
+            break;
+                
+        
     }
 }
 
 //--------------------------------------------------------------
 void cloudPlayer::keyReleased(int key){
+    switch(key){
+        case 'p':
+            if(cloudMovie.isPlaying()){
+                fadeOut();
+            }
+            break;
+    }
 
 }
 

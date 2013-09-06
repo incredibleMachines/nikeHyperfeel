@@ -23,7 +23,9 @@ void Ring::setup(int _nParticles, ofVec2f _ctr, float _radius, float _springines
         
         myParticle.setInitialCondition(x,y,0,0,0.3);
         myParticle.color.setHsb(78, 50 , 200, 200);
+
         particles.push_back(myParticle);
+        originalParticlePos.push_back(myParticle);
         
     }
     
@@ -68,7 +70,10 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
         //Incoming forces from blobs
         for (int n=0; n<blobs.size(); n++) {
             particles[i].addAttractionForce(blobs[n].x, blobs[n].y,  200, 0.7f);
+            particles[i].addRepulsionForce(ofGetWidth(), ofGetHeight(),  300, 5.7f);
+            particles[i].addRepulsionForce(0, ofGetHeight(),  300, 5.7f);
             particles[i].changeColor(blobs[n],100);
+            particles[i].bounceOffWalls();
         }
         
         //Particle-to-particle forces
@@ -94,11 +99,23 @@ void Ring::updateForces(vector<ofVec2f>_blobs){
         springs[i].color = tempColor;
     }
     
+    for (int i=0; i<particles.size(); i++) {
+        if(blobs.size()<=0){
+            particles[i].pos.interpolate(originalParticlePos[i].pos,0.01);
+        }
+    }
+    
+
+    
     // Particle update. This should go at the end--Important!!
     for (int i=0; i<particles.size(); i++) {
         particles[i].addDampingForce();
         particles[i].update();
     }
+    
+
+    
+    
 
 }
 

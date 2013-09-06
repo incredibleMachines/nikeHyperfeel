@@ -44,6 +44,7 @@ class lunarlon : public ofBaseApp{
     void sendOff();
     void receiveTouch();
     float animateTouch(); //touch reaction triggering function
+    void loadLatestBgCapture();
 
     
 

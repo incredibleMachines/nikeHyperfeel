@@ -5,10 +5,10 @@ void cloudSender::setup(){
 
 	ofBackground(0, 0, 0);
     
-    host[0]="192.168.0.55";
-    host[1]="192.168.1.10";
-    host[2]="192.168.1.10";
-    host[3]="192.168.0.101";
+    host[0]="10.0.1.11";
+    host[1]="10.0.1.12";
+    host[2]="10.0.1.13";
+    host[3]="10.0.1.14";
     
     
 	// open an outgoing connection to HOST:PORT

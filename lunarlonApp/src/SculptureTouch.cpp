@@ -39,8 +39,8 @@ void SculptureTouch::setup(){
     line.addVertex(632,189);
     line.addVertex(538,226);
     line.addVertex(444,189);
-    line.addVertex(444,0);
-    line.addVertex(632,0);
+    line.addVertex(444,-300);
+    line.addVertex(632,-300);
     
     line.simplify();
     lines.push_back(line);
@@ -52,11 +52,11 @@ void SculptureTouch::setup(){
 void SculptureTouch::update(){
     
     pts = ((lunarlon *)ofGetAppPtr())->blobPoints; //update vector of all current points (blob positions)
-    cout<<"pts.size(): "<<pts.size()<<endl;
+//    cout<<"pts.size(): "<<pts.size()<<endl;
     
     for (int j=0; j<pts.size(); j++){
-        cout<<"j: "<<j<<"  pts.x: "<<pts[j].x<<endl;
-        cout<<"j: "<<j<<"  pts.y: "<<pts[j].y<<endl;
+//        cout<<"j: "<<j<<"  pts.x: "<<pts[j].x<<endl;
+//        cout<<"j: "<<j<<"  pts.y: "<<pts[j].y<<endl;
         
         //for (int i=0; i<lines.size(); i++){
             if (ofInsidePoly(pts[j],lines[0].getVertices())){

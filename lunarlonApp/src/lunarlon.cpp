@@ -5,9 +5,10 @@ void lunarlon::setup(){
     ofSetVerticalSync(true);
     ofSetFrameRate(60);
     ofEnableAlphaBlending();
+    ofSetWindowShape(1024,1024);
 
-    	touchSend.setup("192.168.0.101", SEND_PORT);
-        touchReceive.setup( RECEIVE_PORT);
+//    	touchSend.setup("192.168.0.101", SEND_PORT);
+//        touchReceive.setup( RECEIVE_PORT);
     
     int nRings;
     int nParticlesringZero;
@@ -40,10 +41,10 @@ void lunarlon::setup(){
     camWidth = 320;//640;
     camHeight = 240;//480;
     
-    camZoom.x=850;
-    camZoom.y=400;
-    camOffset.x=-350;
-    camOffset.y=100 ;
+    camZoom.x=770;
+    camZoom.y=600;
+    camOffset.x=-300;
+    camOffset.y=-500;
     
     camera.setup(camWidth, camHeight);  //-- ofxPs3Eye
     camera.ps3eye.setBrightness(admin.gui.getValueF("CAM1:BRIGHTNESS"));
@@ -76,15 +77,17 @@ void lunarlon::setup(){
     //--- staging, pagination
     stageState = 2; //0=camera raw; 1=CV debug; 2=LIVE
     
+    loadLatestBgCapture();
+    
     //--- debuggin
-    mouseAsBlob = true; //for debug purposes
-    nMouseBlobs = 3; //supports up to 4 only!
+    mouseAsBlob = false; //for debug purposes
+    nMouseBlobs = 1; //supports up to 4 only!
     tex.allocate(ofGetWidth(),ofGetHeight(),GL_RGBA);
 }
 
 //--------------------------------------------------------------
 void lunarlon::update(){
-    
+    SetSystemUIMode(kUIModeAllHidden, kUIOptionAutoShowMenuBar);
     //--- osc.update();
     while(touchReceive.hasWaitingMessages()){
 		// get the next message
@@ -113,7 +116,7 @@ void lunarlon::update(){
                 string fileName = "bg_latestBackgroundCapture.png"; //static name
                 backgroundImg.saveImage(fileName);
                 backgroundImg.saveImage(archiveFileName);
-                cout<<"SAVED BG IMAGE: "<< archiveFileName << endl;
+//                cout<<"SAVED BG IMAGE: "<< archiveFileName << endl;
                 
                 bLearnBakground = false;
             }
@@ -248,7 +251,7 @@ void lunarlon::update(){
         users[i].updatePosition(blobPoints[i]);
     }
     
-    cout<<"blobPoints.size(): "<<blobPoints.size()<<endl;
+//    cout<<"blobPoints.size(): "<<blobPoints.size()<<endl;
     
     //--- admin
     if(bDrawAdmin) {
@@ -332,9 +335,9 @@ void lunarlon::draw(){
         bg.draw(0,0,ofGetWidth(),ofGetHeight());
         
         //Draw user graphics
-        for(int i=0; i<blobPoints.size();i++){
-            users[i].draw();
-        }
+//        for(int i=0; i<blobPoints.size();i++){
+//            users[i].draw();
+//        }
         
         ringmaster.draw();
         
@@ -379,7 +382,7 @@ void lunarlon::keyPressed(int key){
         case ' ':
             stageState++;
             if (stageState>2) stageState = 0;
-            cout<<"stageState: "<<stageState<<endl;
+//            cout<<"stageState: "<<stageState<<endl;
             break;
             
         case 'c':
@@ -388,7 +391,7 @@ void lunarlon::keyPressed(int key){
             
         case '`':
             bDrawAdmin = !bDrawAdmin;
-            cout<<"bDrawAdmin = "<<bDrawAdmin<<endl;
+//            cout<<"bDrawAdmin = "<<bDrawAdmin<<endl;
             break;
             
         case 'm':
@@ -528,21 +531,21 @@ float lunarlon::animateTouch(){
 
 
 
-//void lunarlon::loadLatestBgCapture(){
-//    
-//    capturedBgImage.loadImage("bg_latestBackgroundCapture.png"); //load latest
-//    ofxCvColorImage tmpBg;
-//    tmpBg.setFromPixels(capturedBgImage.getPixels(), 320, 240);  //set into cvColorImage
-//    grayImage.setFromColorImage(tmpBg);                          //set grayImage to our bg
-//    grayBg = grayImage;		// the = sign copys the pixels from grayImage into grayBg (operator overloading)
-//    
-//    colorImgStage=colorImg;
-//    colorImgStage.resize(stageWidth, stageHeight);
-//    grayImageStage.resize(colorImgStage.width, colorImgStage.height);
-//    grayImageStage = colorImgStage;
-//    grayBgStage.resize(grayImageStage.width, grayImageStage.height);
-//    grayBgStage = grayImageStage;
-//    
-//    bLearnBakground = false;
-//}
+void lunarlon::loadLatestBgCapture(){
+    
+    capturedBgImage.loadImage("bg_latestBackgroundCapture.png"); //load latest
+    ofxCvColorImage tmpBg;
+    tmpBg.setFromPixels(capturedBgImage.getPixels(), 320, 240);  //set into cvColorImage
+    grayImage.setFromColorImage(tmpBg);                          //set grayImage to our bg
+    grayBg = grayImage;		// the = sign copys the pixels from grayImage into grayBg (operator overloading)
+    
+    colorImgStage=colorImg;
+    colorImgStage.resize(stageWidth, stageHeight);
+    grayImageStage.resize(colorImgStage.width, colorImgStage.height);
+    grayImageStage = colorImgStage;
+    grayBgStage.resize(grayImageStage.width, grayImageStage.height);
+    grayBgStage = grayImageStage;
+    
+    bLearnBakground = false;
+}
 

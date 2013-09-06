@@ -58,14 +58,19 @@ void RingMaster::draw(){
     for (int i=0; i<rings.size(); i++) {
         rings[i].draw();
     }
+    ofPushStyle();
+    ofSetColor(0);
+    ofEllipse(centerOfRings,100,40);
+    ofRect(centerOfRings.x-50,0,centerOfRings.x+50,centerOfRings.y);
+    ofPopStyle();
     
-    //Draw blob points
-    for (int i=0; i<blobs.size(); i++) {
-        ofColor color;
-        color.setHsb(50, 255, 255);
-        ofSetColor(color);
-        ofCircle(blobs[i], 5);
-    }
+//    //Draw blob points
+//    for (int i=0; i<blobs.size(); i++) {
+//        ofColor color;
+//        color.setHsb(50, 255, 255);
+//        ofSetColor(color);
+//        ofCircle(blobs[i], 5);
+//    }
 
 //    ofRect(centerOfRings,10,10);
 

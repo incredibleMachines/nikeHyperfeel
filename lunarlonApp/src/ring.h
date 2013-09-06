@@ -37,9 +37,11 @@ public:
     
     //Particles
     vector<particle>particles;
+    vector<particle>originalParticlePos;
     float p2pForceRadius;
     float p2pForceStrength;
     float nParticles;
+    
     
     //Springs
     vector<Spring>springs;
